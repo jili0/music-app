@@ -12,7 +12,7 @@
 
 ## Das Ziel
 
-- das Erlerntes anwenden und uns herausfordern und etwas dazulernen
+- das Erlernte anwenden und uns herausfordern und etwas dazulernen
 
 ## Technologien
 - Typescript
