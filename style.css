@@ -1,0 +1,44 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+html {
+  background-color: black;
+  display: grid;
+  place-content: center;
+  text-align: center;
+}
+
+body {
+  background-color: slateblue;
+  min-height: 24rem;
+  width: 60vw;
+  max-width: 24rem;
+  border-radius: 12px;
+  margin-top: 5rem;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+
+.currentSongImg {
+  background-color: aquamarine;
+  height: 15rem;
+  width: 15rem;
+}
+
+.controlBtns {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.playList {
+  border: solid 1px black;
+  min-height: 10rem;
+  width: 100%;
+}
