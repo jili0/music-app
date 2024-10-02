@@ -35,7 +35,7 @@
    - `git branch html`
    - `git branch ethoden-js`
    - usw.
-4. testen
+4. testen arbeit
 
 ## 6. Coden /programmieren
 
