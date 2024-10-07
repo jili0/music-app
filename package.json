@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "- Was kann der Benutzer damit tun? - Ein Lied abspielen, pausieren, aussuchen/filtern , vor- oder zurückspulen, eine List von den Liedern anzeigen, neue Musik hinzufügen, ein Lied löschen, als \"favorita\" speichern, Lautstärke regulieren",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "tsc --watch",
