@@ -57,13 +57,31 @@ searchBtn?.addEventListener("click", showSearchbar)
 
 //Menübtn ag
 
-const menuBtn = document.querySelector(".menu-btn") as HTMLInputElement;
-const container = document.querySelector(".container") as HTMLInputElement;
-if (menuBtn && container) {
- menuBtn.addEventListener("click", () => {
- container.classList.toggle("active");
- });
+const menuBtn = document.getElementById("menu-btn")
+const container = document.getElementById("container")
+
+menuBtn?.addEventListener("click", () =>{
+    container?.classList.toggle("active");
+});
+
+
+// jl: button functions
+const prevBtn = document.getElementById("prev")
+const playBtn = document.getElementById("play")
+const nextBtn = document.getElementById("next")
+
+const playPreviousSong = () => {
+    console.log("prev")
 }
 
+const playNextSong = () => {
+    console.log("next")
+}
 
+const playSong = () => {
+    console.log("play")
+}
 
+playBtn?.addEventListener("click", playSong)
+prevBtn?.addEventListener("click", playPreviousSong)
+nextBtn?.addEventListener("click", playNextSong)
