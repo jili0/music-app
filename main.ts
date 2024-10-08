@@ -44,3 +44,13 @@ function makePlaylist (playlist: Song[]): void {
     document.addEventListener("DOMContentLoaded", () => {
         makePlaylist(playlist);
     })
+
+
+//jl: toggle searchbar
+const showSearchbar = () => {
+  if (searchbar) searchbar.style.animationName === "hideSearchbar" ? searchbar.style.animationName = "showSearchbar" : searchbar.style.animationName = "hideSearchbar" ;
+
+}
+const searchBtn = document.getElementById("searchBtn")
+const searchbar = document.getElementById("searchbar")
+searchBtn?.addEventListener("click", showSearchbar)
