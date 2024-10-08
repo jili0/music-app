@@ -18,7 +18,7 @@ const searchbar = document.getElementById("searchbar") as HTMLElement;
 const prevBtn = document.getElementById("prev") as HTMLElement;
 const playBtn = document.getElementById("play") as HTMLElement;
 const nextBtn = document.getElementById("next") as HTMLElement;
-let isPlaying = false;
+let isPlaying:boolean = false;
 
 // functions
 
