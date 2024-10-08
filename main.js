@@ -36,3 +36,25 @@ const showSearchbar = () => {
 const searchBtn = document.getElementById("searchBtn");
 const searchbar = document.getElementById("searchbar");
 searchBtn === null || searchBtn === void 0 ? void 0 : searchBtn.addEventListener("click", showSearchbar);
+//Menübtn ag
+// const menuBtn = document.querySelector(".menu-btn")
+//  container = document.querySelector(".container")
+// menuBtn.addEventListener("click", () =>{
+//     container.classList.toggle("active");
+// });
+// jl: button functions
+const prevBtn = document.getElementById("prev");
+const playBtn = document.getElementById("play");
+const nextBtn = document.getElementById("next");
+const playPreviousSong = () => {
+    console.log("prev");
+};
+const playNextSong = () => {
+    console.log("next");
+};
+const playSong = () => {
+    console.log("play");
+};
+playBtn === null || playBtn === void 0 ? void 0 : playBtn.addEventListener("click", playSong);
+prevBtn === null || prevBtn === void 0 ? void 0 : prevBtn.addEventListener("click", playPreviousSong);
+nextBtn === null || nextBtn === void 0 ? void 0 : nextBtn.addEventListener("click", playNextSong);
