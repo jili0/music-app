@@ -50,13 +50,11 @@ function makePlaylist() {
 document.addEventListener("DOMContentLoaded", () => {
     makePlaylist();
 });
-const audioPlayer = document.getElementById("audio-player");
 //dt: Song abspielen
 function playSong(audioFile, title, artist) {
     const audioPlayer = document.getElementById("audio-player");
     if (audioPlayer) {
-        audioPlayer.src = audioFile; // Pfad zur Musikdatei aus der JSON
-        console.log(`Playing: ${audioFile}`);
+        audioPlayer.src = audioFile;
         audioPlayer.play().catch(err => {
             console.error('Fehler beim Abspielen der Musik:', err);
         });

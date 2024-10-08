@@ -55,17 +55,12 @@ document.addEventListener("DOMContentLoaded", () => {
   makePlaylist();
 });
 
-const audioPlayer = document.getElementById("audio-player") as HTMLAudioElement;
-
-
-
 //dt: Song abspielen
 function playSong(audioFile: string, title: string, artist: string) {
     const audioPlayer = document.getElementById("audio-player") as HTMLAudioElement;
 
     if (audioPlayer) {
-      audioPlayer.src = audioFile;  // Pfad zur Musikdatei aus der JSON
-      console.log(`Playing: ${audioFile}`);
+      audioPlayer.src = audioFile;  
       audioPlayer.play().catch(err => {
         console.error('Fehler beim Abspielen der Musik:', err);
       });
