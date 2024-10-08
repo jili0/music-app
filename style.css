@@ -71,7 +71,6 @@ i:hover{
   color: rgba(0, 0, 0, 0.5);
 }
 
-
 .searchbar:hover::placeholder {
   color: rgba(0, 0, 0, 0.4);
 }
@@ -79,7 +78,6 @@ i:hover{
 .searchbar:focus::placeholder {
   color: rgba(0, 0, 0, 0.3);
 }
-
 
 @keyframes showSearchbar {
   0% {
