@@ -37,11 +37,11 @@ const searchBtn = document.getElementById("searchBtn");
 const searchbar = document.getElementById("searchbar");
 searchBtn === null || searchBtn === void 0 ? void 0 : searchBtn.addEventListener("click", showSearchbar);
 //Menübtn ag
-// const menuBtn = document.querySelector(".menu-btn")
-//  container = document.querySelector(".container")
-// menuBtn.addEventListener("click", () =>{
-//     container.classList.toggle("active");
-// });
+const menuBtn = document.getElementById("menu-btn");
+const container = document.getElementById("container");
+menuBtn === null || menuBtn === void 0 ? void 0 : menuBtn.addEventListener("click", () => {
+    container === null || container === void 0 ? void 0 : container.classList.toggle("active");
+});
 // jl: button functions
 const prevBtn = document.getElementById("prev");
 const playBtn = document.getElementById("play");
