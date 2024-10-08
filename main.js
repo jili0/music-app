@@ -81,11 +81,18 @@ const toggleSearchbar = () => {
 };
 const playPreviousSong = () => __awaiter(void 0, void 0, void 0, function* () {
     playlist = yield fetchData();
-    console.log("prev");
+    let index = Number(audioPlayer.src.split("").slice(-5, -4).join("")) - 2;
+    index < 0 ? (index += playlist.length) : null;
+    togglePlay(index);
 });
 const playNextSong = () => __awaiter(void 0, void 0, void 0, function* () {
-    playlist = yield fetchData();
-    console.log("next");
+    if (!audioPlayer.src) {
+        togglePlay(0);
+    }
+    else {
+        let index = Number(audioPlayer.src.split("").slice(-5, -4).join(""));
+        togglePlay(index);
+    }
 });
 const play = () => {
     if (!audioPlayer.src) {
