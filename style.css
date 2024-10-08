@@ -27,6 +27,7 @@ body {
   background-color: rgb(145, 135, 211);
   box-shadow: 0px 4px 15px rgba(0,0,0,0.4);
 }
+
 i{
   cursor: pointer;
   transition: all 0.3s;
@@ -105,10 +106,12 @@ i:hover{
   visibility: visible;
   transform: scale(1);
 }
+
 .list{
   width: 100%;
   border-spacing: 0px 2px;
 }
+
 .list tr{
   height: 50px;
   text-align: center;
@@ -121,6 +124,7 @@ i:hover{
   background-color: #222;
   cursor: pointer;
 }
+
 .list .title{
   width: 215px;
   text-align: left;
@@ -140,9 +144,11 @@ i:hover{
   bottom: -60px;
   transition: all 0.3s;
 }
+
 .container.active .current-song-title{
   bottom: 10px;
 }
+
 .info{
   position: absolute;
   left: 50%;
@@ -161,6 +167,7 @@ i:hover{
   font-size: 10px;
   color: #6d6d6d;
 }
+
 .container.active .info{
   top: 66px;
   left: 126px;
@@ -168,6 +175,7 @@ i:hover{
   transform: translate(0);
   color: #111;
 }
+
 .controls{
   display: flex;
   gap: 20px;
