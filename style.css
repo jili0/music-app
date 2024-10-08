@@ -51,6 +51,9 @@ i:hover {
   padding: 20px;
   font-size: 16px;
   z-index: 10;
+ }
+
+ .cover-image{
   gap: 24px;
 }
 
@@ -115,7 +118,7 @@ i:hover {
   background-size: cover;
   background-position: center;
   transform-origin: 0% 0%;
-}
+ }
 
 .player-body {
   position: absolute;
@@ -125,9 +128,8 @@ i:hover {
   width: 100%;
   background-color: black;
   transition: all 0.3s;
-}
-
-.list-wrapper {
+ }
+ .list-wrapper{
   height: 425px;
   width: 100%;
   overflow: auto;
@@ -135,6 +137,16 @@ i:hover {
   top: 378px;
   transform-origin: 0% 0%;
   transition: all 0.3s;
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.1);
+}
+
+.container.active .list-wrapper{
+  top:182px;
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
 }
 
 .list {
