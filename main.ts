@@ -21,6 +21,8 @@ async function fetchData():Promise<Song[]> {
   }
 }
 
+
+
 //Playlist erstellen
 async function makePlaylist(): Promise<void> {
   const playlist = await fetchData()
@@ -30,7 +32,7 @@ async function makePlaylist(): Promise<void> {
     const playlistHTML = playlist
       .map((song) => {
         return `
-        <div class="song">
+        <div class="song" data-audio="${song.audioFile}" data-title="${song.title}" data-artist="${song.artist}" onclick="playSong('${song.audioFile}', '${song.title}', '${song.artist}')">
           <div class="no"><h6>${song.number}</h6></div>
           <div class="title"><h6>${song.title}</h6></div>
           <div class="artist"><h6>${song.artist}</h6></div>
@@ -42,18 +44,44 @@ async function makePlaylist(): Promise<void> {
       .join("");
 
     playlistElement.innerHTML = playlistHTML;
+
+   
   }
 }
+  
+
 
 document.addEventListener("DOMContentLoaded", () => {
   makePlaylist();
 });
 
 const audioPlayer = document.getElementById("audio-player") as HTMLAudioElement;
+
+
+
 //dt: Song abspielen
-function playSong (audioFile: string, title: string, artist: string) {
-    audioPlayer.src = audioFile;
-    audioPlayer.play();
+function playSong(audioFile: string, title: string, artist: string) {
+    const audioPlayer = document.getElementById("audio-player") as HTMLAudioElement;
+
+    if (audioPlayer) {
+      audioPlayer.src = audioFile;  // Pfad zur Musikdatei aus der JSON
+      console.log(`Playing: ${audioFile}`);
+      audioPlayer.play().catch(err => {
+        console.error('Fehler beim Abspielen der Musik:', err);
+      });
+    } else {
+      console.error('Audio player element not found.');
+    }
+
+    // Aktualisieren der Song-Infos
+    const songTitleElement = document.querySelector('.info h2');
+    const songArtistElement = document.querySelector('.info h3');
+    
+    if (songTitleElement) {
+        songTitleElement.textContent = title;
+    } if (songArtistElement) {
+        songArtistElement.textContent = artist;
+    }
 }
 
 
