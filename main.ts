@@ -9,6 +9,8 @@ interface Song {
   length: string;
   audioFile: string;
 }
+let currentSongIndex = 0;
+let songs: Song[] = [];
 
 async function fetchData():Promise<Song[]> {
   try {
@@ -23,16 +25,18 @@ async function fetchData():Promise<Song[]> {
 
 
 
-//Playlist erstellen
+//dt: Playlist erstellen
 async function makePlaylist(): Promise<void> {
-  const playlist = await fetchData()
+  const playlist = await fetchData();
+  songs = playlist;
+
   const playlistElement = document.getElementById("playlist") as HTMLElement;
 
   if (playlistElement) {
     const playlistHTML = playlist
-      .map((song) => {
+      .map((song, index) => {
         return `
-        <div class="song" data-audio="${song.audioFile}" data-title="${song.title}" data-artist="${song.artist}" onclick="playSong('${song.audioFile}', '${song.title}', '${song.artist}')">
+        <div class="song" onclick="playSong(${index})">
           <div class="no"><h6>${song.number}</h6></div>
           <div class="title"><h6>${song.title}</h6></div>
           <div class="artist"><h6>${song.artist}</h6></div>
@@ -56,11 +60,15 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 //dt: Song abspielen
-function playSong(audioFile: string, title: string, artist: string) {
+function playSong(index: number) {
+  currentSongIndex = index;
+  const song = songs[currentSongIndex];
     const audioPlayer = document.getElementById("audio-player") as HTMLAudioElement;
+    const audioSource = document.getElementById("audio-source") as HTMLSourceElement;
 
-    if (audioPlayer) {
-      audioPlayer.src = audioFile;  
+    if (audioPlayer && song && audioSource) {
+      audioSource.src = song.audioFile;  
+      audioPlayer.load();
       audioPlayer.play().catch(err => {
         console.error('Fehler beim Abspielen der Musik:', err);
       });
@@ -73,11 +81,49 @@ function playSong(audioFile: string, title: string, artist: string) {
     const songArtistElement = document.querySelector('.info h3');
     
     if (songTitleElement) {
-        songTitleElement.textContent = title;
+        songTitleElement.textContent = song.title;
     } if (songArtistElement) {
-        songArtistElement.textContent = artist;
+        songArtistElement.textContent = song.artist;
     }
 }
+
+
+// Play/Pause-Funktion für das Play-Icon
+const playPauseBtn = document.getElementById("playpause") as HTMLElement;
+const audioPlayer = document.getElementById("audio-player") as HTMLAudioElement;
+
+const togglePlayPause = () => {
+  if (audioPlayer.paused) {
+    audioPlayer.play();
+    playPauseBtn.classList.replace("fa-play", "fa-pause"); // Icon zu Pause ändern
+  } else {
+    audioPlayer.pause();
+    playPauseBtn.classList.replace("fa-pause", "fa-play"); // Icon zu Play ändern
+  }
+};
+
+// Event Listener für das Play-Icon
+playPauseBtn.addEventListener("click", togglePlayPause);
+
+// dt: previous Song
+const playPreviousSong = () => {
+  if (currentSongIndex > 0) {
+    currentSongIndex--; // Zum vorherigen Song wechseln
+    playSong(currentSongIndex);
+  }
+};
+//dt: next song
+const playNextSong = () => {
+  if (currentSongIndex < songs.length - 1) {
+    currentSongIndex++; // Zum nächsten Song wechseln
+    playSong(currentSongIndex);
+  }
+};
+const prevBtn = document.getElementById("prev") as HTMLInputElement;
+const nextBtn = document.getElementById("next") as HTMLInputElement;
+prevBtn.addEventListener("click", playPreviousSong);
+nextBtn.addEventListener("click", playNextSong);
+
 
 
 //jl: toggle searchbar
@@ -103,23 +149,4 @@ menuBtn?.addEventListener("click", () => {
   container?.classList.toggle("active");
 });
 
-// jl: button functions
-const prevBtn = document.getElementById("prev");
-const playBtn = document.getElementById("play");
-const nextBtn = document.getElementById("next");
 
-const playPreviousSong = () => {
-  console.log("prev");
-};
-
-const playNextSong = () => {
-  console.log("next");
-};
-
-// const playSong = () => {
-//     console.log("play")
-// }
-
-// playBtn?.addEventListener("click", playSong)
-prevBtn?.addEventListener("click", playPreviousSong)
-nextBtn?.addEventListener("click", playNextSong)
