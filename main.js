@@ -11,6 +11,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+let currentSongIndex = 0;
+let songs = [];
 function fetchData() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -24,16 +26,17 @@ function fetchData() {
         }
     });
 }
-//Playlist erstellen
+//dt: Playlist erstellen
 function makePlaylist() {
     return __awaiter(this, void 0, void 0, function* () {
         const playlist = yield fetchData();
+        songs = playlist;
         const playlistElement = document.getElementById("playlist");
         if (playlistElement) {
             const playlistHTML = playlist
-                .map((song) => {
+                .map((song, index) => {
                 return `
-        <div class="song" data-audio="${song.audioFile}" data-title="${song.title}" data-artist="${song.artist}" onclick="playSong('${song.audioFile}', '${song.title}', '${song.artist}')">
+        <div class="song" onclick="playSong(${index})">
           <div class="no"><h6>${song.number}</h6></div>
           <div class="title"><h6>${song.title}</h6></div>
           <div class="artist"><h6>${song.artist}</h6></div>
@@ -51,10 +54,14 @@ document.addEventListener("DOMContentLoaded", () => {
     makePlaylist();
 });
 //dt: Song abspielen
-function playSong(audioFile, title, artist) {
+function playSong(index) {
+    currentSongIndex = index;
+    const song = songs[currentSongIndex];
     const audioPlayer = document.getElementById("audio-player");
-    if (audioPlayer) {
-        audioPlayer.src = audioFile;
+    const audioSource = document.getElementById("audio-source");
+    if (audioPlayer && song && audioSource) {
+        audioSource.src = song.audioFile;
+        audioPlayer.load();
         audioPlayer.play().catch(err => {
             console.error('Fehler beim Abspielen der Musik:', err);
         });
@@ -66,12 +73,45 @@ function playSong(audioFile, title, artist) {
     const songTitleElement = document.querySelector('.info h2');
     const songArtistElement = document.querySelector('.info h3');
     if (songTitleElement) {
-        songTitleElement.textContent = title;
+        songTitleElement.textContent = song.title;
     }
     if (songArtistElement) {
-        songArtistElement.textContent = artist;
+        songArtistElement.textContent = song.artist;
     }
 }
+// Play/Pause-Funktion für das Play-Icon
+const playPauseBtn = document.getElementById("playpause");
+const audioPlayer = document.getElementById("audio-player");
+const togglePlayPause = () => {
+    if (audioPlayer.paused) {
+        audioPlayer.play();
+        playPauseBtn.classList.replace("fa-play", "fa-pause"); // Icon zu Pause ändern
+    }
+    else {
+        audioPlayer.pause();
+        playPauseBtn.classList.replace("fa-pause", "fa-play"); // Icon zu Play ändern
+    }
+};
+// Event Listener für das Play-Icon
+playPauseBtn.addEventListener("click", togglePlayPause);
+// dt: previous Song
+const playPreviousSong = () => {
+    if (currentSongIndex > 0) {
+        currentSongIndex--; // Zum vorherigen Song wechseln
+        playSong(currentSongIndex);
+    }
+};
+//dt: next song
+const playNextSong = () => {
+    if (currentSongIndex < songs.length - 1) {
+        currentSongIndex++; // Zum nächsten Song wechseln
+        playSong(currentSongIndex);
+    }
+};
+const prevBtn = document.getElementById("prev");
+const nextBtn = document.getElementById("next");
+prevBtn.addEventListener("click", playPreviousSong);
+nextBtn.addEventListener("click", playNextSong);
 //jl: toggle searchbar
 const toggleSearchbar = () => {
     if (!(searchbar === null || searchbar === void 0 ? void 0 : searchbar.classList.contains("showSearchbar")) && !(searchbar === null || searchbar === void 0 ? void 0 : searchbar.classList.contains("hideSearchbar"))) {
@@ -91,19 +131,3 @@ const container = document.getElementById("container");
 menuBtn === null || menuBtn === void 0 ? void 0 : menuBtn.addEventListener("click", () => {
     container === null || container === void 0 ? void 0 : container.classList.toggle("active");
 });
-// jl: button functions
-const prevBtn = document.getElementById("prev");
-const playBtn = document.getElementById("play");
-const nextBtn = document.getElementById("next");
-const playPreviousSong = () => {
-    console.log("prev");
-};
-const playNextSong = () => {
-    console.log("next");
-};
-// const playSong = () => {
-//     console.log("play")
-// }
-// playBtn?.addEventListener("click", playSong)
-prevBtn === null || prevBtn === void 0 ? void 0 : prevBtn.addEventListener("click", playPreviousSong);
-nextBtn === null || nextBtn === void 0 ? void 0 : nextBtn.addEventListener("click", playNextSong);

@@ -31,8 +31,7 @@
       </div>
       <div class="cover-image"></div>
       <div class="player-body">
-        <!--Audio Player-->
-        <audio id="audio-player" controls style = "width: 100%;"></audio>
+       
       </div>
 
       <div class="list-wrapper">
@@ -150,10 +149,15 @@
       <h2>song title</h2>
       <h3>artist</h3>
     </div>
+     <!--Audio Player-->
+
+    <audio id="audio-player" controls>
+      <source id="audio-source" type="audio/mpeg">
+  </audio>
   
     <div class="controls">
       <i class="fas fa-backward" id="prev"></i>
-      <i class="fas fa-play" id="play"></i>
+      <i class="fas fa-play" id="playpause"></i>
       <i class="fas fa-forward" id="next"></i>
     </div>
     <div class="more-controls">
