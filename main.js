@@ -21,6 +21,7 @@ const searchbar = document.getElementById("searchbar");
 const prevBtn = document.getElementById("prev");
 const playBtn = document.getElementById("play");
 const nextBtn = document.getElementById("next");
+let isPlaying = false;
 // functions
 const fetchData = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -39,7 +40,7 @@ const renderPlaylist = () => __awaiter(void 0, void 0, void 0, function* () {
         const playlistHTML = playlist
             .map((song, index) => {
             return `
-        <div class="song" data-audio="./music/music-${song.number}.mp3" data-title="${song.title}" data-artist="${song.artist}" onclick="playSong(${index})">
+        <div class="song" data-audio="./music/music-${song.number}.mp3" data-title="${song.title}" data-artist="${song.artist}" onclick="togglePlay(${index})">
           <div class="number">${song.number}</div>
           <div class="title">${song.title}</div>
           <div class="artist">${song.artist}</div>
@@ -52,12 +53,19 @@ const renderPlaylist = () => __awaiter(void 0, void 0, void 0, function* () {
         playlistElement.innerHTML = playlistHTML;
     }
 });
-const playSong = (index) => {
+const togglePlay = (index) => {
     const { number, title, artist } = playlist[index];
     audioPlayer.src = `./music/music-${number}.mp3`;
-    audioPlayer.play().catch((err) => {
-        console.error("Fehler beim Abspielen der Musik:", err);
-    });
+    if (!isPlaying) {
+        audioPlayer.play().catch((err) => {
+            console.error("Fehler beim Abspielen der Musik:", err);
+        });
+        isPlaying = true;
+    }
+    else {
+        audioPlayer.pause();
+        isPlaying = false;
+    }
     songTitleElement.textContent = title;
     songArtistElement.textContent = artist;
 };
@@ -71,12 +79,14 @@ const toggleSearchbar = () => {
         searchbar === null || searchbar === void 0 ? void 0 : searchbar.classList.toggle("hideSearchbar");
     }
 };
-const playPreviousSong = () => {
+const playPreviousSong = () => __awaiter(void 0, void 0, void 0, function* () {
+    playlist = yield fetchData();
     console.log("prev");
-};
-const playNextSong = () => {
+});
+const playNextSong = () => __awaiter(void 0, void 0, void 0, function* () {
+    playlist = yield fetchData();
     console.log("next");
-};
+});
 const play = () => {
     !(audioPlayer === null || audioPlayer === void 0 ? void 0 : audioPlayer.src)
         ? (audioPlayer.src = "./music/music-1.mp3")

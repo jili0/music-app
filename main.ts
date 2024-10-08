@@ -11,17 +11,18 @@ const audioPlayer = document.getElementById("audio-player") as HTMLAudioElement;
 const playlistElement = document.getElementById("playlist") as HTMLElement;
 const songTitleElement = document.getElementById("infoTitle") as HTMLElement;
 const songArtistElement = document.getElementById("infoArtist") as HTMLElement;
-const menuBtn = document.getElementById("menu-btn");
-const container = document.getElementById("container");
+const menuBtn = document.getElementById("menu-btn") as HTMLElement;
+const container = document.getElementById("container") as HTMLElement;
 const searchBtn = document.getElementById("searchBtn") as HTMLElement;
 const searchbar = document.getElementById("searchbar") as HTMLElement;
-const prevBtn = document.getElementById("prev");
-const playBtn = document.getElementById("play");
-const nextBtn = document.getElementById("next");
+const prevBtn = document.getElementById("prev") as HTMLElement;
+const playBtn = document.getElementById("play") as HTMLElement;
+const nextBtn = document.getElementById("next") as HTMLElement;
+let isPlaying = false;
 
 // functions
 
-const fetchData= async():Promise<Song[]> => {
+const fetchData = async (): Promise<Song[]> => {
   try {
     const response = await fetch("./data/songs.json");
     const jsonData: Song[] = await response.json();
@@ -30,15 +31,15 @@ const fetchData= async():Promise<Song[]> => {
     console.log(err);
     return [];
   }
-}
+};
 
-const renderPlaylist = async():Promise<void> => {
+const renderPlaylist = async (): Promise<void> => {
   playlist = await fetchData();
   if (playlistElement) {
     const playlistHTML = playlist
       .map((song, index) => {
         return `
-        <div class="song" data-audio="./music/music-${song.number}.mp3" data-title="${song.title}" data-artist="${song.artist}" onclick="playSong(${index})">
+        <div class="song" data-audio="./music/music-${song.number}.mp3" data-title="${song.title}" data-artist="${song.artist}" onclick="togglePlay(${index})">
           <div class="number">${song.number}</div>
           <div class="title">${song.title}</div>
           <div class="artist">${song.artist}</div>
@@ -50,17 +51,23 @@ const renderPlaylist = async():Promise<void> => {
       .join("");
     playlistElement.innerHTML = playlistHTML;
   }
-}
+};
 
-const playSong = (index: number) => {
+const togglePlay = (index: number) => {
   const { number, title, artist } = playlist[index];
   audioPlayer.src = `./music/music-${number}.mp3`;
-  audioPlayer.play().catch((err) => {
-    console.error("Fehler beim Abspielen der Musik:", err);
-  });
+  if (!isPlaying) {
+    audioPlayer.play().catch((err) => {
+      console.error("Fehler beim Abspielen der Musik:", err);
+    });
+    isPlaying = true;
+  } else {
+    audioPlayer.pause();
+    isPlaying = false;
+  }
   songTitleElement.textContent = title;
   songArtistElement.textContent = artist;
-}
+};
 
 const toggleSearchbar = () => {
   if (
@@ -74,11 +81,13 @@ const toggleSearchbar = () => {
   }
 };
 
-const playPreviousSong = () => {
+const playPreviousSong = async () => {
+  playlist = await fetchData();
   console.log("prev");
 };
 
-const playNextSong = () => {
+const playNextSong = async () => {
+  playlist = await fetchData();
   console.log("next");
 };
 
@@ -87,7 +96,6 @@ const play = () => {
     ? (audioPlayer.src = "./music/music-1.mp3")
     : console.log(audioPlayer.src);
 };
-
 
 // call the funktions
 document.addEventListener("DOMContentLoaded", () => renderPlaylist());
