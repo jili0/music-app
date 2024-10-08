@@ -138,7 +138,7 @@ i:hover{
   top:180px;
  }
 
- .list-wrapper{
+  .list-wrapper{
   height: 425px;
   width: 100%;
   overflow: auto;
@@ -149,19 +149,50 @@ i:hover{
   opacity: 0;
   visibility: hidden;
   transform: scale(0.1);
-}
+} 
 
-.container.active .list-wrapper{
+ .container.active .list-wrapper{
   top:182px;
   opacity: 1;
   visibility: visible;
   transform: scale(1);
-}
+} 
 .list{
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
   width: 100%;
-  border-spacing: 0px 2px;
 }
-.list tr{
+.song {
+  display: grid;
+  grid-template-columns: 50px 1fr 100px 50px;
+  align-items: center;
+  background-color: black;
+  padding: 10px;
+  transition: background-color 0.3s;
+}
+.no, .title, .length, .fa-heart {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  background-color: black;
+}
+
+.title {
+  justify-content: flex-start; /* Titel links ausrichten */
+}
+
+.length {
+  justify-content: flex-end; /* Länge rechts ausrichten */
+}
+
+.song:hover .title {
+  padding-left: 5px;
+  transition: all 0.3s;
+  background-color: #222;
+}
+/* .list tr{
   height: 50px;
   text-align: center;
   background-color: black;
@@ -183,7 +214,7 @@ i:hover{
 .list tr:hover .title{
   padding-left:5px;
   width: 210px;
-}
+} */
 
 .current-song-title{
   position: absolute;
