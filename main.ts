@@ -1,5 +1,6 @@
 //Musikdaten als Array hinzufügen
 //dt
+// import from "./data/songs.json" assert{type: "json" } as data;
 
 interface Song {
   number: number;
@@ -8,33 +9,21 @@ interface Song {
   length: string;
 }
 
-const playlist: Song[] = [
-  {
-    number: 1,
-    title: "Home",
-    artist: "Jordan Schor & Harley Bird",
-    length: "3:36",
-  },
-  { number: 2, title: "Here I Am", artist: "One Point Zero", length: "3:05" },
-  { number: 3, title: "Crazy", artist: "BEAUZ & JVNA", length: "3:08" },
-  {
-    number: 4,
-    title: "Want Me",
-    artist: "Jimmy Hardwind & Mike Archangelo",
-    length: "3:48",
-  },
-  {
-    number: 5,
-    title: "Sun Goes Down",
-    artist: "Jim Yosef & ROY KNOX",
-    length: "2:48",
-  },
-  { number: 6, title: "Vision", artist: "Lost Sky", length: "3:54" },
-];
+async function fetchData():Promise<Song[]> {
+  try {
+    const response = await fetch('./data/songs.json');
+    const jsonData:Song[] = await response.json();
+    return jsonData;
+  } catch (err) {
+    console.log(err)
+    return []
+  }
+}
 
 //Playlist erstellen
-function makePlaylist(playlist: Song[]): void {
-  const playlistElement = document.getElementById("playlist");
+async function makePlaylist(): Promise<void> {
+  const playlist = await fetchData()
+  const playlistElement = document.getElementById("playlist") as HTMLElement;
 
   if (playlistElement) {
     const playlistHTML = playlist
@@ -52,8 +41,9 @@ function makePlaylist(playlist: Song[]): void {
     playlistElement.innerHTML = playlistHTML;
   }
 }
+
 document.addEventListener("DOMContentLoaded", () => {
-  makePlaylist(playlist);
+  makePlaylist();
 });
 
 //jl: toggle searchbar
