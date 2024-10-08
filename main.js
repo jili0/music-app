@@ -36,3 +36,11 @@ const showSearchbar = () => {
 const searchBtn = document.getElementById("searchBtn");
 const searchbar = document.getElementById("searchbar");
 searchBtn === null || searchBtn === void 0 ? void 0 : searchBtn.addEventListener("click", showSearchbar);
+//Menübtn ag
+const menuBtn = document.querySelector(".menu-btn");
+const container = document.querySelector(".container");
+if (menuBtn && container) {
+    menuBtn.addEventListener("click", () => {
+        container.classList.toggle("active");
+    });
+}

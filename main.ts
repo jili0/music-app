@@ -57,10 +57,13 @@ searchBtn?.addEventListener("click", showSearchbar)
 
 //Menübtn ag
 
-// const menuBtn = document.querySelector(".menu-btn")
-//  container = document.querySelector(".container")
+const menuBtn = document.querySelector(".menu-btn") as HTMLInputElement;
+const container = document.querySelector(".container") as HTMLInputElement;
+if (menuBtn && container) {
+ menuBtn.addEventListener("click", () => {
+ container.classList.toggle("active");
+ });
+}
 
-// menuBtn.addEventListener("click", () =>{
-//     container.classList.toggle("active");
 
-// });
+
