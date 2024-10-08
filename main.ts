@@ -53,14 +53,16 @@ const renderPlaylist = async (): Promise<void> => {
   }
 };
 
-const togglePlay = (index: number) => {
+const togglePlay = (index: number, shouldToggle: boolean = true) => {
   const { number, title, artist } = playlist[index];
   audioPlayer.src = `./music/music-${number}.mp3`;
   if (!isPlaying) {
     audioPlayer.play().catch((err) => {
       console.error("Fehler beim Abspielen der Musik:", err);
     });
-    isPlaying = true;
+    if (shouldToggle) {
+       isPlaying = true;
+    }
   } else {
     audioPlayer.pause();
     isPlaying = false;
@@ -85,14 +87,14 @@ const playPreviousSong = async () => {
   playlist = await fetchData();
   let index = Number(audioPlayer.src.split("").slice(-5, -4).join("")) - 2;
   index < 0 ? (index += playlist.length) : null;
-  togglePlay(index);
+  togglePlay(index, false);
 };
 
 const playNextSong = async () => {
   playlist = await fetchData();
   let index = Number(audioPlayer.src.split("").slice(-5, -4).join(""));
   index >= playlist.length? index -= playlist.length : null;
-  togglePlay(index);
+  togglePlay(index, false);
 };
 
 const play = () => {
