@@ -50,6 +50,7 @@ i:hover{
   font-size: 16px;
   z-index: 10;
  }
+
  .cover-image{
   width: 100%;
   height: 366px;
@@ -62,6 +63,13 @@ i:hover{
   transform-origin: 0% 0%;
  }
 
+ .container.active .cover-image{
+  transform: scale(0.251);
+  left: 23px;
+  top: 60px;
+  border-radius: 20px;
+ }
+
  .player-body{
   position: absolute;
   top: 366px;
@@ -71,6 +79,13 @@ i:hover{
   background-color: black;
   transition: all 0.3s;
  }
+
+ .container.active .player-body{
+  height: 470px;
+  left: 0;
+  top:180px;
+ }
+
  .list-wrapper{
   height: 425px;
   width: 100%;
@@ -79,6 +94,16 @@ i:hover{
   top: 378px;
   transform-origin: 0% 0%;
   transition: all 0.3s;
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.1);
+}
+
+.container.active .list-wrapper{
+  top:182px;
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
 }
 .list{
   width: 100%;
@@ -106,4 +131,83 @@ i:hover{
 .list tr:hover .title{
   padding-left:5px;
   width: 210px;
+}
+
+.current-song-title{
+  position: absolute;
+  right: 23px;
+  font-size: 14px;
+  bottom: -60px;
+  transition: all 0.3s;
+}
+.container.active .current-song-title{
+  bottom: 10px;
+}
+.info{
+  position: absolute;
+  left: 50%;
+  top: 440px;
+  transform: translateX(-50%);
+  text-align: center;
+  transition: all 0.3s;
+}
+
+.info h2{
+  font-size: 16px;
+  margin-bottom:5px;
+}
+
+.info h3{
+  font-size: 10px;
+  color: #6d6d6d;
+}
+.container.active .info{
+  top: 66px;
+  left: 126px;
+  text-align: left;
+  transform: translate(0);
+  color: #111;
+}
+.controls{
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  font-size: 26px;
+  width: 100%;
+  height: 35px;
+  position: absolute;
+  bottom: 100px;
+  z-index: 10;
+  transition: all 0.3s;
+}
+
+.controls #playpause{
+  font-size: 40px;
+}
+
+.container.active .controls{
+  position: absolute;
+  width: 216px;
+  bottom: 4px;
+  left: -44px;
+  transform: scale(0.45);
+}
+
+.more-controls{
+  font-size: 15px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  z-index:20;
+  transition: all 0.3s;
+}
+
+.container.active .more-controls{
+  bottom: -60px;
 }
