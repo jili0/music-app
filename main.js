@@ -1,7 +1,5 @@
 "use strict";
-//Musikdaten als Array hinzufügen und Audio-Player
-//dt
-// import from "./data/songs.json" assert{type: "json" } as data;
+// initialize
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -11,72 +9,61 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-function fetchData() {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const response = yield fetch('./data/songs.json');
-            const jsonData = yield response.json();
-            return jsonData;
-        }
-        catch (err) {
-            console.log(err);
-            return [];
-        }
-    });
-}
-//Playlist erstellen
-function makePlaylist() {
-    return __awaiter(this, void 0, void 0, function* () {
-        const playlist = yield fetchData();
-        const playlistElement = document.getElementById("playlist");
-        if (playlistElement) {
-            const playlistHTML = playlist
-                .map((song) => {
-                return `
-        <div class="song" data-audio="${song.audioFile}" data-title="${song.title}" data-artist="${song.artist}" onclick="playSong('${song.audioFile}', '${song.title}', '${song.artist}')">
-          <div class="no"><h6>${song.number}</h6></div>
-          <div class="title"><h6>${song.title}</h6></div>
-          <div class="artist"><h6>${song.artist}</h6></div>
-          <div class="length"><h6>${song.length}</h6></div>
+let playlist;
+const audioPlayer = document.getElementById("audio-player");
+const playlistElement = document.getElementById("playlist");
+const songTitleElement = document.getElementById("infoTitle");
+const songArtistElement = document.getElementById("infoArtist");
+const menuBtn = document.getElementById("menu-btn");
+const container = document.getElementById("container");
+const searchBtn = document.getElementById("searchBtn");
+const searchbar = document.getElementById("searchbar");
+const prevBtn = document.getElementById("prev");
+const playBtn = document.getElementById("play");
+const nextBtn = document.getElementById("next");
+// functions
+const fetchData = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const response = yield fetch("./data/songs.json");
+        const jsonData = yield response.json();
+        return jsonData;
+    }
+    catch (err) {
+        console.log(err);
+        return [];
+    }
+});
+const renderPlaylist = () => __awaiter(void 0, void 0, void 0, function* () {
+    playlist = yield fetchData();
+    if (playlistElement) {
+        const playlistHTML = playlist
+            .map((song, index) => {
+            return `
+        <div class="song" data-audio="./music/music-${song.number}.mp3" data-title="${song.title}" data-artist="${song.artist}" onclick="playSong(${index})">
+          <div class="number">${song.number}</div>
+          <div class="title">${song.title}</div>
+          <div class="artist">${song.artist}</div>
+          <div class="length">${song.length}</div>
           <div><i class="fas fa-heart"></i></div>
         </div>
         `;
-            })
-                .join("");
-            playlistElement.innerHTML = playlistHTML;
-        }
-    });
-}
-document.addEventListener("DOMContentLoaded", () => {
-    makePlaylist();
+        })
+            .join("");
+        playlistElement.innerHTML = playlistHTML;
+    }
 });
-const audioPlayer = document.getElementById("audio-player");
-//dt: Song abspielen
-function playSong(audioFile, title, artist) {
-    const audioPlayer = document.getElementById("audio-player");
-    if (audioPlayer) {
-        audioPlayer.src = audioFile; // Pfad zur Musikdatei aus der JSON
-        console.log(`Playing: ${audioFile}`);
-        audioPlayer.play().catch(err => {
-            console.error('Fehler beim Abspielen der Musik:', err);
-        });
-    }
-    else {
-        console.error('Audio player element not found.');
-    }
-    // Aktualisieren der Song-Infos
-    const songTitleElement = document.querySelector('.info h2');
-    const songArtistElement = document.querySelector('.info h3');
-    if (songTitleElement) {
-        songTitleElement.textContent = title;
-    }
-    if (songArtistElement) {
-        songArtistElement.textContent = artist;
-    }
-}
-//jl: toggle searchbar
+const playSong = (index) => {
+    const { number, title, artist } = playlist[index];
+    audioPlayer.src = `./music/music-${number}.mp3`;
+    audioPlayer.play().catch((err) => {
+        console.error("Fehler beim Abspielen der Musik:", err);
+    });
+    songTitleElement.textContent = title;
+    songArtistElement.textContent = artist;
+};
 const toggleSearchbar = () => {
-    if (!(searchbar === null || searchbar === void 0 ? void 0 : searchbar.classList.contains("showSearchbar")) && !(searchbar === null || searchbar === void 0 ? void 0 : searchbar.classList.contains("hideSearchbar"))) {
+    if (!(searchbar === null || searchbar === void 0 ? void 0 : searchbar.classList.contains("showSearchbar")) &&
+        !(searchbar === null || searchbar === void 0 ? void 0 : searchbar.classList.contains("hideSearchbar"))) {
         searchbar === null || searchbar === void 0 ? void 0 : searchbar.classList.add("showSearchbar");
     }
     else {
@@ -84,28 +71,21 @@ const toggleSearchbar = () => {
         searchbar === null || searchbar === void 0 ? void 0 : searchbar.classList.toggle("hideSearchbar");
     }
 };
-const searchBtn = document.getElementById("searchBtn");
-const searchbar = document.getElementById("searchbar");
-searchBtn === null || searchBtn === void 0 ? void 0 : searchBtn.addEventListener("click", toggleSearchbar);
-//Menübtn ag
-const menuBtn = document.getElementById("menu-btn");
-const container = document.getElementById("container");
-menuBtn === null || menuBtn === void 0 ? void 0 : menuBtn.addEventListener("click", () => {
-    container === null || container === void 0 ? void 0 : container.classList.toggle("active");
-});
-// jl: button functions
-const prevBtn = document.getElementById("prev");
-const playBtn = document.getElementById("play");
-const nextBtn = document.getElementById("next");
 const playPreviousSong = () => {
     console.log("prev");
 };
 const playNextSong = () => {
     console.log("next");
 };
-// const playSong = () => {
-//     console.log("play")
-// }
-// playBtn?.addEventListener("click", playSong)
+const play = () => {
+    !(audioPlayer === null || audioPlayer === void 0 ? void 0 : audioPlayer.src)
+        ? (audioPlayer.src = "./music/music-1.mp3")
+        : console.log(audioPlayer.src);
+};
+// call the funktions
+document.addEventListener("DOMContentLoaded", () => renderPlaylist());
+menuBtn === null || menuBtn === void 0 ? void 0 : menuBtn.addEventListener("click", () => container === null || container === void 0 ? void 0 : container.classList.toggle("active"));
+searchBtn === null || searchBtn === void 0 ? void 0 : searchBtn.addEventListener("click", toggleSearchbar);
+playBtn === null || playBtn === void 0 ? void 0 : playBtn.addEventListener("click", play);
 prevBtn === null || prevBtn === void 0 ? void 0 : prevBtn.addEventListener("click", playPreviousSong);
 nextBtn === null || nextBtn === void 0 ? void 0 : nextBtn.addEventListener("click", playNextSong);
