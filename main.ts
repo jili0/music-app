@@ -89,12 +89,10 @@ const playPreviousSong = async () => {
 };
 
 const playNextSong = async () => {
-  if (!audioPlayer.src) {
-    togglePlay(0);
-  } else {
-    let index = Number(audioPlayer.src.split("").slice(-5, -4).join(""));
-    togglePlay(index);
-  }
+  playlist = await fetchData();
+  let index = Number(audioPlayer.src.split("").slice(-5, -4).join(""));
+  index >= playlist.length? index -= playlist.length : null;
+  togglePlay(index);
 };
 
 const play = () => {

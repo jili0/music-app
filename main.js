@@ -86,13 +86,10 @@ const playPreviousSong = () => __awaiter(void 0, void 0, void 0, function* () {
     togglePlay(index);
 });
 const playNextSong = () => __awaiter(void 0, void 0, void 0, function* () {
-    if (!audioPlayer.src) {
-        togglePlay(0);
-    }
-    else {
-        let index = Number(audioPlayer.src.split("").slice(-5, -4).join(""));
-        togglePlay(index);
-    }
+    playlist = yield fetchData();
+    let index = Number(audioPlayer.src.split("").slice(-5, -4).join(""));
+    index >= playlist.length ? index -= playlist.length : null;
+    togglePlay(index);
 });
 const play = () => {
     if (!audioPlayer.src) {
