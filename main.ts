@@ -92,9 +92,12 @@ const playNextSong = async () => {
 };
 
 const play = () => {
-  !audioPlayer?.src
-    ? (audioPlayer.src = "./music/music-1.mp3")
-    : console.log(audioPlayer.src);
+  if (!audioPlayer.src) {
+    togglePlay(0)
+  } else {
+    let index = Number(audioPlayer.src.split("").slice(-5,-4).join("")) - 1;
+    togglePlay(index)
+  }
 };
 
 // call the funktions

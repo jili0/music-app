@@ -88,9 +88,13 @@ const playNextSong = () => __awaiter(void 0, void 0, void 0, function* () {
     console.log("next");
 });
 const play = () => {
-    !(audioPlayer === null || audioPlayer === void 0 ? void 0 : audioPlayer.src)
-        ? (audioPlayer.src = "./music/music-1.mp3")
-        : console.log(audioPlayer.src);
+    if (!audioPlayer.src) {
+        togglePlay(0);
+    }
+    else {
+        let index = Number(audioPlayer.src.split("").slice(-5, -4).join("")) - 1;
+        togglePlay(index);
+    }
 };
 // call the funktions
 document.addEventListener("DOMContentLoaded", () => renderPlaylist());
