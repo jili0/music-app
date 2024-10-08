@@ -1,87 +1,101 @@
 //Musikdaten als Array hinzufügen
 //dt
 
-
-
 interface Song {
-    number: number;
-    title: string;
-    artist: string;
-    length: string;
+  number: number;
+  title: string;
+  artist: string;
+  length: string;
 }
 
-const playlist : Song[] = [
-    {number: 1, title: "Home", artist: "Jordan Schor & Harley Bird", length: "3:36"},
-    {number: 2, title: "Here I Am", artist: "One Point Zero", length: "3:05"},
-    {number: 3, title: "Crazy", artist: "BEAUZ & JVNA", length: "3:08"},
-    {number: 4, title: "Want Me", artist: "Jimmy Hardwind & Mike Archangelo", length: "3:48"},
-    {number: 5, title: "Sun Goes Down", artist: "Jim Yosef & ROY KNOX", length: "2:48"},
-    {number: 6, title: "Vision", artist: "Lost Sky", length: "3:54"}
-    
-]
+const playlist: Song[] = [
+  {
+    number: 1,
+    title: "Home",
+    artist: "Jordan Schor & Harley Bird",
+    length: "3:36",
+  },
+  { number: 2, title: "Here I Am", artist: "One Point Zero", length: "3:05" },
+  { number: 3, title: "Crazy", artist: "BEAUZ & JVNA", length: "3:08" },
+  {
+    number: 4,
+    title: "Want Me",
+    artist: "Jimmy Hardwind & Mike Archangelo",
+    length: "3:48",
+  },
+  {
+    number: 5,
+    title: "Sun Goes Down",
+    artist: "Jim Yosef & ROY KNOX",
+    length: "2:48",
+  },
+  { number: 6, title: "Vision", artist: "Lost Sky", length: "3:54" },
+];
 
 //Playlist erstellen
-function makePlaylist (playlist: Song[]): void {
-    const playlistElement = document.getElementById("playlist");
+function makePlaylist(playlist: Song[]): void {
+  const playlistElement = document.getElementById("playlist");
 
-    if(playlistElement){
-        
-            const playlistHTML = playlist.map((song) => {
-                return `<tr>
+  if (playlistElement) {
+    const playlistHTML = playlist
+      .map((song) => {
+        return `<tr>
             <td><h6>${song.number}</h6></td>
             <td><h6>${song.title}</h6></td>
             <td><h6>${song.artist}</h6></td>
             <td><h6>${song.length}</h6></td>
             <td><i class="fas fa-heart"></i></td>
           </tr>`;
-            }).join("");
+      })
+      .join("");
 
-            playlistElement.innerHTML = playlistHTML;
-
-      
-        }
-    }
-    document.addEventListener("DOMContentLoaded", () => {
-        makePlaylist(playlist);
-    })
-
+    playlistElement.innerHTML = playlistHTML;
+  }
+}
+document.addEventListener("DOMContentLoaded", () => {
+  makePlaylist(playlist);
+});
 
 //jl: toggle searchbar
-const showSearchbar = () => {
-  if (searchbar) searchbar.style.animationName === "hideSearchbar" ? searchbar.style.animationName = "showSearchbar" : searchbar.style.animationName = "hideSearchbar" ;
+const toggleSearchbar = () => {
+  if (!searchbar?.classList.contains("showSearchbar") && !searchbar?.classList.contains("hideSearchbar") ) {
+    searchbar?.classList.add("showSearchbar") 
+  } else {
+    searchbar?.classList.toggle("showSearchbar") 
+    searchbar?.classList.toggle("hideSearchbar") 
+  }
+};
 
-}
-const searchBtn = document.getElementById("searchBtn")
-const searchbar = document.getElementById("searchbar")
-searchBtn?.addEventListener("click", showSearchbar)
+const searchBtn = document.getElementById("searchBtn");
+const searchbar = document.getElementById("searchbar");
+searchBtn?.addEventListener("click", toggleSearchbar);
 
 //Menübtn ag
 
-const menuBtn = document.getElementById("menu-btn")
-const container = document.getElementById("container")
+const menuBtn = document.getElementById("menu-btn");
+const container = document.getElementById("container");
 
-menuBtn?.addEventListener("click", () =>{
-    container?.classList.toggle("active");
+menuBtn?.addEventListener("click", () => {
+  container?.classList.toggle("active");
 });
 
-
 // jl: button functions
-const prevBtn = document.getElementById("prev")
-const playBtn = document.getElementById("play")
-const nextBtn = document.getElementById("next")
+const prevBtn = document.getElementById("prev");
+const playBtn = document.getElementById("play");
+const nextBtn = document.getElementById("next");
 
 const playPreviousSong = () => {
-    console.log("prev")
-}
+  console.log("prev");
+};
 
 const playNextSong = () => {
-    console.log("next")
-}
+  console.log("next");
+};
 
 const playSong = () => {
-    console.log("play")
-}
+  console.log("play");
+};
 
-playBtn?.addEventListener("click", playSong)
-prevBtn?.addEventListener("click", playPreviousSong)
-nextBtn?.addEventListener("click", playNextSong)
+playBtn?.addEventListener("click", playSong);
+prevBtn?.addEventListener("click", playPreviousSong);
+nextBtn?.addEventListener("click", playNextSong);
