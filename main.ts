@@ -54,3 +54,13 @@ const showSearchbar = () => {
 const searchBtn = document.getElementById("searchBtn")
 const searchbar = document.getElementById("searchbar")
 searchBtn?.addEventListener("click", showSearchbar)
+
+//Menübtn ag
+
+// const menuBtn = document.querySelector(".menu-btn")
+//  container = document.querySelector(".container")
+
+// menuBtn.addEventListener("click", () =>{
+//     container.classList.toggle("active");
+
+// });
