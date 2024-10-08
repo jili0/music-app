@@ -1,4 +1,4 @@
-//Musikdaten als Array hinzufügen
+//Musikdaten als Array hinzufügen und Audio-Player
 //dt
 // import from "./data/songs.json" assert{type: "json" } as data;
 
@@ -7,6 +7,7 @@ interface Song {
   title: string;
   artist: string;
   length: string;
+  audioFile: string;
 }
 
 async function fetchData():Promise<Song[]> {
@@ -28,13 +29,15 @@ async function makePlaylist(): Promise<void> {
   if (playlistElement) {
     const playlistHTML = playlist
       .map((song) => {
-        return `<tr>
-            <td><h6>${song.number}</h6></td>
-            <td><h6>${song.title}</h6></td>
-            <td><h6>${song.artist}</h6></td>
-            <td><h6>${song.length}</h6></td>
-            <td><i class="fas fa-heart"></i></td>
-          </tr>`;
+        return `
+        <div class="song">
+          <div class="no"><h6>${song.number}</h6></div>
+          <div class="title"><h6>${song.title}</h6></div>
+          <div class="artist"><h6>${song.artist}</h6></div>
+          <div class="length"><h6>${song.length}</h6></div>
+          <div><i class="fas fa-heart"></i></div>
+        </div>
+        `;
       })
       .join("");
 
@@ -45,6 +48,14 @@ async function makePlaylist(): Promise<void> {
 document.addEventListener("DOMContentLoaded", () => {
   makePlaylist();
 });
+
+const audioPlayer = document.getElementById("audio-player") as HTMLAudioElement;
+//dt: Song abspielen
+function playSong (audioFile: string, title: string, artist: string) {
+    audioPlayer.src = audioFile;
+    audioPlayer.play();
+}
+
 
 //jl: toggle searchbar
 const toggleSearchbar = () => {
@@ -82,10 +93,10 @@ const playNextSong = () => {
   console.log("next");
 };
 
-const playSong = () => {
-  console.log("play");
-};
+// const playSong = () => {
+//     console.log("play")
+// }
 
-playBtn?.addEventListener("click", playSong);
-prevBtn?.addEventListener("click", playPreviousSong);
-nextBtn?.addEventListener("click", playNextSong);
+// playBtn?.addEventListener("click", playSong)
+prevBtn?.addEventListener("click", playPreviousSong)
+nextBtn?.addEventListener("click", playNextSong)
