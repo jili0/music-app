@@ -50,6 +50,8 @@ const renderPlaylist = async (): Promise<void> => {
       })
       .join("");
     playlistElement.innerHTML = playlistHTML;
+    songTitleElement.textContent = playlist[0].title;
+    songArtistElement.textContent = playlist[0].artist;
   }
 };
 

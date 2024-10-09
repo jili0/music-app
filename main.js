@@ -51,6 +51,8 @@ const renderPlaylist = () => __awaiter(void 0, void 0, void 0, function* () {
         })
             .join("");
         playlistElement.innerHTML = playlistHTML;
+        songTitleElement.textContent = playlist[0].title;
+        songArtistElement.textContent = playlist[0].artist;
     }
 });
 const updatePlayBtnIcon = () => {
