@@ -23,10 +23,14 @@ const currentTimeDisplay = document.getElementById('current-time') as HTMLElemen
 const durationDisplay = document.getElementById('duration') as HTMLElement;
 let isPlaying:boolean = false;
 const shuffleBtn = document.getElementById("shuffle") as HTMLElement;
-let isPlaying: boolean = false;
+
 let isShuffling: boolean = false;
 
-
+// Favourits
+let favourits = [];
+const songs = {
+  img_src: "1.jpg"
+}
 // functions
 
 const fetchData = async (): Promise<Song[]> => {
@@ -97,6 +101,27 @@ const toggleSearchbar = () => {
   }
 };
 
+// Favourits fa-heart
+const toggleFavorite = (event: Event) => {
+  const heartIcon = event.target as HTMLElement;
+  
+  if (heartIcon.classList.contains("favorite")) {
+    heartIcon.classList.remove("favorite");
+    heartIcon.style.color = "white"; 
+  } else {
+    heartIcon.classList.add("favorite");
+    heartIcon.style.color = "rgb(80, 71, 143)"; 
+  }
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+  const heartIcons = document.querySelectorAll(".fa-heart");
+
+  heartIcons.forEach((heartIcon) => {
+    heartIcon.addEventListener("click", toggleFavorite);
+  });
+});
+// end favourits
 const playPreviousSong = async () => {
   audioPlayer.pause();
   isPlaying = false;
