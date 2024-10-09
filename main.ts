@@ -18,7 +18,9 @@ const searchbar = document.getElementById("searchbar") as HTMLElement;
 const prevBtn = document.getElementById("prev") as HTMLElement;
 const playBtn = document.getElementById("play") as HTMLElement;
 const nextBtn = document.getElementById("next") as HTMLElement;
-let isPlaying:boolean = false;
+const shuffleBtn = document.getElementById("shuffle") as HTMLElement;
+let isPlaying: boolean = false;
+let isShuffling: boolean = false;
 
 // functions
 
@@ -31,7 +33,7 @@ const fetchData = async (): Promise<Song[]> => {
     console.log(err);
     return [];
   }
-}
+};
 
 const renderPlaylist = async (): Promise<void> => {
   playlist = await fetchData();
@@ -56,8 +58,10 @@ const renderPlaylist = async (): Promise<void> => {
 };
 
 const updatePlayBtnIcon = () => {
-  isPlaying ? playBtn.classList.replace("fa-play", "fa-pause") : playBtn.classList.replace("fa-pause", "fa-play");
-}
+  isPlaying
+    ? playBtn.classList.replace("fa-play", "fa-pause")
+    : playBtn.classList.replace("fa-pause", "fa-play");
+};
 
 const togglePlay = (index: number) => {
   const { number, title, artist } = playlist[index];
@@ -95,7 +99,7 @@ const playPreviousSong = async () => {
   let index = Number(audioPlayer.src.split("").slice(-5, -4).join("")) - 2;
   index < 0 ? (index += playlist.length) : null;
   togglePlay(index);
-  console.log(isPlaying)
+  console.log(isPlaying);
 };
 
 const playNextSong = async () => {
@@ -103,7 +107,7 @@ const playNextSong = async () => {
   isPlaying = false;
   playlist = await fetchData();
   let index = Number(audioPlayer.src.split("").slice(-5, -4).join(""));
-  index >= playlist.length? index -= playlist.length : null;
+  index >= playlist.length ? (index -= playlist.length) : null;
   togglePlay(index);
 };
 
@@ -113,7 +117,32 @@ const play = () => {
   } else {
     let index = Number(audioPlayer.src.split("").slice(-5, -4).join("")) - 1;
     togglePlay(index);
-  } 
+  }
+};
+
+const shuffle = async (e) => {
+  if (!isShuffling) {
+    e.target.style.color = "slateblue";
+    const randomIndex = Math.floor(Math.random() * playlist.length);
+    audioPlayer.src = `./music/music-${randomIndex + 1}.mp3`;
+    audioPlayer.play();
+    audioPlayer.autoplay = true;
+    isPlaying = true;
+    isShuffling = true;
+    updatePlayBtnIcon();
+    songTitleElement.textContent = playlist[randomIndex].title;
+    songArtistElement.textContent = playlist[randomIndex].artist;
+  } else {
+    e.target.style.color = "white";
+    audioPlayer.pause();
+    audioPlayer.autoplay = false;
+    isPlaying = false;
+    isShuffling = false;
+  }
+  isShuffling = false;
+  while (isShuffling){
+    return shuffle(e)
+  }
 };
 
 // call the funktions
@@ -123,3 +152,4 @@ searchBtn?.addEventListener("click", toggleSearchbar);
 playBtn?.addEventListener("click", play);
 prevBtn?.addEventListener("click", playPreviousSong);
 nextBtn?.addEventListener("click", playNextSong);
+shuffleBtn?.addEventListener("click", shuffle);
