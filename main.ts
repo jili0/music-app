@@ -4,7 +4,6 @@ let playlist: Song[];
 let isPlaying: boolean = false;
 let isShuffling: boolean = false;
 
-
 interface Song {
   number: number;
   title: string;
@@ -12,27 +11,26 @@ interface Song {
   length: string;
 }
 
-
-const audioPlayer = document.getElementById("audio-player") as HTMLAudioElement;
+const audioPlayer = document.getElementById("audioPlayer") as HTMLAudioElement;
 const playlistElement = document.getElementById("playlist") as HTMLElement;
 const songTitleElement = document.getElementById("infoTitle") as HTMLElement;
 const songArtistElement = document.getElementById("infoArtist") as HTMLElement;
-const menuBtn = document.getElementById("menu-btn") as HTMLElement;
+const menuBtn = document.getElementById("menuBtn") as HTMLElement;
 const container = document.getElementById("container") as HTMLElement;
 const searchBtn = document.getElementById("searchBtn") as HTMLElement;
 const searchbar = document.getElementById("searchbar") as HTMLInputElement;
 const prevBtn = document.getElementById("prev") as HTMLElement;
 const playBtn = document.getElementById("play") as HTMLElement;
 const nextBtn = document.getElementById("next") as HTMLElement;
-const progressBar = document.getElementById('progress-bar') as HTMLInputElement;
-const currentTimeDisplay = document.getElementById('current-time') as HTMLElement;
-const durationDisplay = document.getElementById('duration') as HTMLElement;
+const progressBar = document.getElementById("progress-bar") as HTMLInputElement;
+const currentTimeDisplay = document.getElementById(
+  "currentTime"
+) as HTMLElement;
+const durationDisplay = document.getElementById("duration") as HTMLElement;
 const shuffleBtn = document.getElementById("shuffle") as HTMLElement;
 const filteredSongsContainer = document.getElementById(
   "filteredSongs"
 ) as HTMLElement;
-
-
 
 // functions
 
@@ -53,12 +51,12 @@ const renderPlaylist = async (): Promise<void> => {
     const playlistHTML = playlist
       .map((song, index) => {
         return `
-        <div class="song" data-audio="./music/music-${song.number}.mp3" data-title="${song.title}" data-artist="${song.artist}" onclick="togglePlay(${index})">
+        <div class="playlistItem" data-audio="./music/music-${song.number}.mp3" data-title="${song.title}" data-artist="${song.artist}" onclick="togglePlay(${index})">
           <div class="number">${song.number}</div>
           <div class="title">${song.title}</div>
           <div class="artist">${song.artist}</div>
           <div class="length">${song.length}</div>
-          <div><i class="fas fa-heart"></i></div>
+          <i class="fas fa-heart"></i>
         </div>
         `;
       })
@@ -132,7 +130,7 @@ const searchSong = () => {
   }
 };
 
-const handleKeydown = (e) => {
+const handleKeydown = (e: KeyboardEvent) => {
   if (e.key === "Enter" && searchbar.value) {
     searchSong();
   } else if (e.key === "Enter" && !searchbar.value) {
@@ -190,25 +188,25 @@ const shuffle = async (e: MouseEvent) => {
   }
 };
 
-// Event Listener für die Fortschrittsleiste
-audioPlayer.addEventListener('timeupdate', () => {
-  if (audioPlayer.duration && !isNaN(audioPlayer.duration) && audioPlayer.currentTime && !isNaN(audioPlayer.currentTime)) {
-    const progress = (audioPlayer.currentTime / audioPlayer.duration) * 100;
-    progressBar.value = progress.toString();
-
-// Hilfsfunktion für das Formatieren der Zeit (Sekunden -> Minuten:Sekunden)
 const formatTime = (timeInSeconds: number) => {
   const minutes = Math.floor(timeInSeconds / 60);
   const seconds = Math.floor(timeInSeconds % 60);
-  return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+  return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
 };
 
- // Zeige aktuelle Zeit und Dauer in Minuten:Sekunden an
+const setCurrentTime = () => {
+  const newTime = (parseFloat(progressBar.value) / 100) * audioPlayer.duration;
+  audioPlayer.currentTime = newTime;
+};
+
+const updateTime = () => {
+  if (!isNaN(audioPlayer.duration) && !isNaN(audioPlayer.currentTime)) {
+    const progress = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+    progressBar.value = progress.toFixed(1).toString();
     currentTimeDisplay.textContent = formatTime(audioPlayer.currentTime);
     durationDisplay.textContent = formatTime(audioPlayer.duration);
   }
-});
-
+};
 
 // call the funktions
 document.addEventListener("DOMContentLoaded", () => renderPlaylist());
@@ -221,8 +219,5 @@ playBtn?.addEventListener("click", play);
 prevBtn?.addEventListener("click", playPreviousSong);
 nextBtn?.addEventListener("click", playNextSong);
 shuffleBtn?.addEventListener("click", shuffle);
-progressBar.addEventListener('input', () => {
-  const newTime = (parseFloat(progressBar.value) / 100) * audioPlayer.duration;
-  audioPlayer.currentTime = newTime;
-});
-
+audioPlayer?.addEventListener("timeupdate", updateTime);
+progressBar?.addEventListener("input", setCurrentTime);
