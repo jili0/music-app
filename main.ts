@@ -31,7 +31,7 @@ const fetchData = async (): Promise<Song[]> => {
     console.log(err);
     return [];
   }
-};
+}
 
 const renderPlaylist = async (): Promise<void> => {
   playlist = await fetchData();

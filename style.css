@@ -140,7 +140,11 @@ i:hover {
   transition: all 0.3s;
 }
 
-.container.active .player-body {
+audio {
+  display: none;
+}
+
+.container.active .player-body{
   height: 470px;
   left: 0;
   top: 180px;
