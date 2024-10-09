@@ -53,6 +53,10 @@ const renderPlaylist = async (): Promise<void> => {
   }
 };
 
+const updatePlayBtnIcon = () => {
+  isPlaying ? playBtn.classList.replace("fa-play", "fa-pause") : playBtn.classList.replace("fa-pause", "fa-play");
+}
+
 const togglePlay = (index: number) => {
   const { number, title, artist } = playlist[index];
   audioPlayer.src = `./music/music-${number}.mp3`;
@@ -67,6 +71,7 @@ const togglePlay = (index: number) => {
   }
   songTitleElement.textContent = title;
   songArtistElement.textContent = artist;
+  updatePlayBtnIcon();
 };
 
 const toggleSearchbar = () => {
