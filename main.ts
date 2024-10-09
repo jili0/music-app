@@ -138,6 +138,7 @@ const shuffle = async (e) => {
     audioPlayer.autoplay = false;
     isPlaying = false;
     isShuffling = false;
+    updatePlayBtnIcon();
   }
 };
 
@@ -149,3 +150,4 @@ playBtn?.addEventListener("click", play);
 prevBtn?.addEventListener("click", playPreviousSong);
 nextBtn?.addEventListener("click", playNextSong);
 shuffleBtn?.addEventListener("click", shuffle);
+
