@@ -338,7 +338,7 @@ footer {
   align-items: center;
   justify-content: space-between;
   padding: .5rem .8rem;
-  border-top: 2px solid slateblue;
+  border-top: 2px solid #6a5acd;
   z-index: 10;
   transition: all 0.1s;
 }
