@@ -75,7 +75,7 @@ const updatePlayBtnIcon = () => {
 };
 
 const updateAlbumImg = (index: number) => {
-  albumImg.src = `./images/music-${index + 1}.jpg`
+  albumImg.src = `./images/music-${index + 1}.jpg`;
 };
 
 const togglePlay = (index: number) => {
