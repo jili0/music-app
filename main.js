@@ -53,6 +53,9 @@ const renderPlaylist = () => __awaiter(void 0, void 0, void 0, function* () {
         playlistElement.innerHTML = playlistHTML;
     }
 });
+const updatePlayBtnIcon = () => {
+    isPlaying ? playBtn.classList.replace("fa-play", "fa-pause") : playBtn.classList.replace("fa-pause", "fa-play");
+};
 const togglePlay = (index) => {
     const { number, title, artist } = playlist[index];
     audioPlayer.src = `./music/music-${number}.mp3`;
@@ -68,6 +71,7 @@ const togglePlay = (index) => {
     }
     songTitleElement.textContent = title;
     songArtistElement.textContent = artist;
+    updatePlayBtnIcon();
 };
 const toggleSearchbar = () => {
     if (!(searchbar === null || searchbar === void 0 ? void 0 : searchbar.classList.contains("showSearchbar")) &&
