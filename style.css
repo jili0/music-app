@@ -178,72 +178,71 @@ audio {
   display: flex;
   flex-direction: column; /* Vertikale Ausrichtung der Songs */
   gap: 10px; /* Abstand zwischen den Songs */
-  padding: 20px;
+  padding: 10px;
 }
 
 .song {
   display: grid;
-  grid-template-columns: 1fr 2fr 2fr 1fr 1fr;
+  grid-template-columns:  40px 2fr 2fr 1fr 30px ;
   align-items: center;
   background-color: black;
-  gap: 10px;
+  padding: 15px;
   transition: background-color 0.3s;
 }
 
-.number,
 .title,
 .length,
-.fa-heart,
 .artist {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
   background-color: black;
+}
+.number {
+  justify-content: flex-start;
+  align-items: center;
+  justify-content: center;
 }
 
 .song .fa-heart {
-  justify-self: center;
+  justify-self: flex-end;
+  margin-left: 20px;
+
 }
 
 .title {
-  justify-content: flex-start; /* Titel links ausrichten */
+  justify-content: flex-start;
+  font-weight: 500;
+  font-size: 16px;
+  color: #ffffff;
+}
+.artist {
+  justify-content: flex-start;
+  font-size: 14px;
+  color: #bbbbbb;
 }
 
 .length {
   justify-content: flex-end; /* Länge rechts ausrichten */
+  font-size: 14px;
+  color: #bbbbbb;
 }
-
 .song:hover .title {
   padding-left: 5px;
   transition: all 0.3s;
   background-color: #222;
 }
-
-/* .list tr{
-  height: 50px;
-  text-align: center;
-  background-color: black;
-  text-indent: 8px;
-  transform-origin: 0% 50%;
+.list-wrapper::-webkit-scrollbar {
+  width: 8px;
+}
+/* .list-wrapper::-webkit-scrollbar-thumb {
+  background-color: #555;
+  border-radius: 10px;
 }
 
-.list tr:hover{
-  background-color: #222;
-  cursor: pointer;
-}
-.list .title{
-  width: 215px;
-  text-align: left;
-  text-indent: 15px;
-  transition: all 0.3s;
-}
-
-.list tr:hover .title{
-  padding-left:5px;
-  width: 210px;
+.list-wrapper::-webkit-scrollbar-track {
+  background-color: #1a1a1a;
 } */
-
 .current-song-title {
   position: absolute;
   right: 23px;
