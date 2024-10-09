@@ -50,25 +50,30 @@ const renderPlaylist = async (): Promise<void> => {
       })
       .join("");
     playlistElement.innerHTML = playlistHTML;
+    songTitleElement.textContent = playlist[0].title;
+    songArtistElement.textContent = playlist[0].artist;
   }
 };
 
-const togglePlay = (index: number, shouldToggle: boolean = true) => {
+const updatePlayBtnIcon = () => {
+  isPlaying ? playBtn.classList.replace("fa-play", "fa-pause") : playBtn.classList.replace("fa-pause", "fa-play");
+}
+
+const togglePlay = (index: number) => {
   const { number, title, artist } = playlist[index];
   audioPlayer.src = `./music/music-${number}.mp3`;
   if (!isPlaying) {
     audioPlayer.play().catch((err) => {
       console.error("Fehler beim Abspielen der Musik:", err);
     });
-    if (shouldToggle) {
-       isPlaying = true;
-    }
+    isPlaying = true;
   } else {
     audioPlayer.pause();
     isPlaying = false;
   }
   songTitleElement.textContent = title;
   songArtistElement.textContent = artist;
+  updatePlayBtnIcon();
 };
 
 const toggleSearchbar = () => {
@@ -84,17 +89,22 @@ const toggleSearchbar = () => {
 };
 
 const playPreviousSong = async () => {
+  audioPlayer.pause();
+  isPlaying = false;
   playlist = await fetchData();
   let index = Number(audioPlayer.src.split("").slice(-5, -4).join("")) - 2;
   index < 0 ? (index += playlist.length) : null;
-  togglePlay(index, false);
+  togglePlay(index);
+  console.log(isPlaying)
 };
 
 const playNextSong = async () => {
+  audioPlayer.pause();
+  isPlaying = false;
   playlist = await fetchData();
   let index = Number(audioPlayer.src.split("").slice(-5, -4).join(""));
   index >= playlist.length? index -= playlist.length : null;
-  togglePlay(index, false);
+  togglePlay(index);
 };
 
 const play = () => {
@@ -103,7 +113,7 @@ const play = () => {
   } else {
     let index = Number(audioPlayer.src.split("").slice(-5, -4).join("")) - 1;
     togglePlay(index);
-  }
+  } 
 };
 
 // call the funktions
