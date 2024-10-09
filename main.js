@@ -71,6 +71,9 @@ const updateAlbumImg = (index) => {
     albumImg.src = `./images/music-${index + 1}.jpg`;
 };
 const togglePlay = (index) => {
+    searchbar.value = "";
+    if (searchbar === null || searchbar === void 0 ? void 0 : searchbar.classList.contains("showSearchbar"))
+        toggleSearchbar();
     const prevSrc = audioPlayer.src;
     const { number, title, artist } = playlist[index];
     audioPlayer.src = `./music/music-${number}.mp3`;
