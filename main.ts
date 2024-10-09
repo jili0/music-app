@@ -18,6 +18,9 @@ const searchbar = document.getElementById("searchbar") as HTMLElement;
 const prevBtn = document.getElementById("prev") as HTMLElement;
 const playBtn = document.getElementById("play") as HTMLElement;
 const nextBtn = document.getElementById("next") as HTMLElement;
+const progressBar = document.getElementById('progress-bar') as HTMLInputElement;
+const currentTimeDisplay = document.getElementById('current-time') as HTMLElement;
+const durationDisplay = document.getElementById('duration') as HTMLElement;
 let isPlaying:boolean = false;
 
 // functions
@@ -123,3 +126,28 @@ searchBtn?.addEventListener("click", toggleSearchbar);
 playBtn?.addEventListener("click", play);
 prevBtn?.addEventListener("click", playPreviousSong);
 nextBtn?.addEventListener("click", playNextSong);
+
+
+// Event Listener für die Fortschrittsleiste
+audioPlayer.addEventListener('timeupdate', () => {
+  if (audioPlayer.duration && !isNaN(audioPlayer.duration) && audioPlayer.currentTime && !isNaN(audioPlayer.currentTime)) {
+    const progress = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+    progressBar.value = progress.toString();
+// Hilfsfunktion für das Formatieren der Zeit (Sekunden -> Minuten:Sekunden)
+const formatTime = (timeInSeconds: number) => {
+  const minutes = Math.floor(timeInSeconds / 60);
+  const seconds = Math.floor(timeInSeconds % 60);
+  return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+};
+ // Zeige aktuelle Zeit und Dauer in Minuten:Sekunden an
+    currentTimeDisplay.textContent = formatTime(audioPlayer.currentTime);
+    durationDisplay.textContent = formatTime(audioPlayer.duration);
+  }
+});
+// Event Listener für die Benutzer-Interaktion mit der Leiste
+progressBar.addEventListener('input', () => {
+  const newTime = (parseFloat(progressBar.value) / 100) * audioPlayer.duration;
+  audioPlayer.currentTime = newTime;
+});
+
+
