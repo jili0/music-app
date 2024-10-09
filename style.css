@@ -273,7 +273,8 @@ audio {
 
 
 .container.active .progressContainer {
-  top: -10rem;
+  top: 10rem;
+  bottom: auto;
 }
 
 .container.active .controlBtns {
