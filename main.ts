@@ -139,10 +139,6 @@ const shuffle = async (e) => {
     isPlaying = false;
     isShuffling = false;
   }
-  isShuffling = false;
-  while (isShuffling){
-    return shuffle(e)
-  }
 };
 
 // call the funktions

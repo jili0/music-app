@@ -135,10 +135,6 @@ const shuffle = (e) => __awaiter(void 0, void 0, void 0, function* () {
         isPlaying = false;
         isShuffling = false;
     }
-    isShuffling = false;
-    while (isShuffling) {
-        return shuffle(e);
-    }
 });
 // call the funktions
 document.addEventListener("DOMContentLoaded", () => renderPlaylist());
