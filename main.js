@@ -22,6 +22,7 @@ const prevBtn = document.getElementById("prev");
 const playBtn = document.getElementById("play");
 const nextBtn = document.getElementById("next");
 const shuffleBtn = document.getElementById("shuffle");
+const filteredSongsContainer = document.getElementById("filteredSongs");
 let isPlaying = false;
 let isShuffling = false;
 // functions
@@ -63,17 +64,18 @@ const updatePlayBtnIcon = () => {
         : playBtn.classList.replace("fa-pause", "fa-play");
 };
 const togglePlay = (index) => {
+    const prevSrc = audioPlayer.src;
     const { number, title, artist } = playlist[index];
     audioPlayer.src = `./music/music-${number}.mp3`;
-    if (!isPlaying) {
+    if (isPlaying && prevSrc === audioPlayer.src) {
+        audioPlayer.pause();
+        isPlaying = false;
+    }
+    else {
         audioPlayer.play().catch((err) => {
             console.error("Fehler beim Abspielen der Musik:", err);
         });
         isPlaying = true;
-    }
-    else {
-        audioPlayer.pause();
-        isPlaying = false;
     }
     songTitleElement.textContent = title;
     songArtistElement.textContent = artist;
@@ -87,6 +89,30 @@ const toggleSearchbar = () => {
     else {
         searchbar === null || searchbar === void 0 ? void 0 : searchbar.classList.toggle("showSearchbar");
         searchbar === null || searchbar === void 0 ? void 0 : searchbar.classList.toggle("hideSearchbar");
+    }
+};
+const resetFilteredSongsContainer = () => {
+    filteredSongsContainer.innerHTML = "";
+    filteredSongsContainer.style.display = "none";
+};
+const searchSong = () => {
+    resetFilteredSongsContainer();
+    const searchStr = searchbar.value.toLowerCase();
+    if (searchStr.length) {
+        const filteredSongs = playlist.filter((song) => song.title.toLowerCase().includes(searchStr) ||
+            song.artist.toLowerCase().includes(searchStr));
+        filteredSongsContainer &&
+            filteredSongs.forEach((song) => (filteredSongsContainer.innerHTML += `<p class="filteredSong" id="filteredSong-${song.number}" onclick="togglePlay(${song.number - 1})">${song.title} by ${song.artist}</p>`));
+        if (filteredSongs.length)
+            filteredSongsContainer.style.display = "block";
+    }
+};
+const handleKeydown = (e) => {
+    if (e.key === "Enter" && searchbar.value) {
+        searchSong();
+    }
+    else if (e.key === "Enter" && !searchbar.value) {
+        alert("Please enter title/ artist to search!");
     }
 };
 const playPreviousSong = () => __awaiter(void 0, void 0, void 0, function* () {
@@ -139,8 +165,11 @@ const shuffle = (e) => __awaiter(void 0, void 0, void 0, function* () {
 });
 // call the funktions
 document.addEventListener("DOMContentLoaded", () => renderPlaylist());
+document.addEventListener("click", resetFilteredSongsContainer);
 menuBtn === null || menuBtn === void 0 ? void 0 : menuBtn.addEventListener("click", () => container === null || container === void 0 ? void 0 : container.classList.toggle("active"));
 searchBtn === null || searchBtn === void 0 ? void 0 : searchBtn.addEventListener("click", toggleSearchbar);
+searchbar === null || searchbar === void 0 ? void 0 : searchbar.addEventListener("input", searchSong);
+searchbar === null || searchbar === void 0 ? void 0 : searchbar.addEventListener("focus", resetFilteredSongsContainer);
 playBtn === null || playBtn === void 0 ? void 0 : playBtn.addEventListener("click", play);
 prevBtn === null || prevBtn === void 0 ? void 0 : prevBtn.addEventListener("click", playPreviousSong);
 nextBtn === null || nextBtn === void 0 ? void 0 : nextBtn.addEventListener("click", playNextSong);
