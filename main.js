@@ -21,7 +21,9 @@ const searchbar = document.getElementById("searchbar");
 const prevBtn = document.getElementById("prev");
 const playBtn = document.getElementById("play");
 const nextBtn = document.getElementById("next");
+const shuffleBtn = document.getElementById("shuffle");
 let isPlaying = false;
+let isShuffling = false;
 // functions
 const fetchData = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -56,7 +58,9 @@ const renderPlaylist = () => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 const updatePlayBtnIcon = () => {
-    isPlaying ? playBtn.classList.replace("fa-play", "fa-pause") : playBtn.classList.replace("fa-pause", "fa-play");
+    isPlaying
+        ? playBtn.classList.replace("fa-play", "fa-pause")
+        : playBtn.classList.replace("fa-pause", "fa-play");
 };
 const togglePlay = (index) => {
     const { number, title, artist } = playlist[index];
@@ -99,7 +103,7 @@ const playNextSong = () => __awaiter(void 0, void 0, void 0, function* () {
     isPlaying = false;
     playlist = yield fetchData();
     let index = Number(audioPlayer.src.split("").slice(-5, -4).join(""));
-    index >= playlist.length ? index -= playlist.length : null;
+    index >= playlist.length ? (index -= playlist.length) : null;
     togglePlay(index);
 });
 const play = () => {
@@ -111,6 +115,31 @@ const play = () => {
         togglePlay(index);
     }
 };
+const shuffle = (e) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!isShuffling) {
+        e.target.style.color = "slateblue";
+        const randomIndex = Math.floor(Math.random() * playlist.length);
+        audioPlayer.src = `./music/music-${randomIndex + 1}.mp3`;
+        audioPlayer.play();
+        audioPlayer.autoplay = true;
+        isPlaying = true;
+        isShuffling = true;
+        updatePlayBtnIcon();
+        songTitleElement.textContent = playlist[randomIndex].title;
+        songArtistElement.textContent = playlist[randomIndex].artist;
+    }
+    else {
+        e.target.style.color = "white";
+        audioPlayer.pause();
+        audioPlayer.autoplay = false;
+        isPlaying = false;
+        isShuffling = false;
+    }
+    isShuffling = false;
+    while (isShuffling) {
+        return shuffle(e);
+    }
+});
 // call the funktions
 document.addEventListener("DOMContentLoaded", () => renderPlaylist());
 menuBtn === null || menuBtn === void 0 ? void 0 : menuBtn.addEventListener("click", () => container === null || container === void 0 ? void 0 : container.classList.toggle("active"));
@@ -118,3 +147,4 @@ searchBtn === null || searchBtn === void 0 ? void 0 : searchBtn.addEventListener
 playBtn === null || playBtn === void 0 ? void 0 : playBtn.addEventListener("click", play);
 prevBtn === null || prevBtn === void 0 ? void 0 : prevBtn.addEventListener("click", playPreviousSong);
 nextBtn === null || nextBtn === void 0 ? void 0 : nextBtn.addEventListener("click", playNextSong);
+shuffleBtn === null || shuffleBtn === void 0 ? void 0 : shuffleBtn.addEventListener("click", shuffle);
