@@ -20,7 +20,7 @@ const songArtistElement = document.getElementById("infoArtist") as HTMLElement;
 const menuBtn = document.getElementById("menu-btn") as HTMLElement;
 const container = document.getElementById("container") as HTMLElement;
 const searchBtn = document.getElementById("searchBtn") as HTMLElement;
-const searchbar = document.getElementById("searchbar") as HTMLElement;
+const searchbar = document.getElementById("searchbar") as HTMLInputElement;
 const prevBtn = document.getElementById("prev") as HTMLElement;
 const playBtn = document.getElementById("play") as HTMLElement;
 const nextBtn = document.getElementById("next") as HTMLElement;
@@ -28,6 +28,10 @@ const progressBar = document.getElementById('progress-bar') as HTMLInputElement;
 const currentTimeDisplay = document.getElementById('current-time') as HTMLElement;
 const durationDisplay = document.getElementById('duration') as HTMLElement;
 const shuffleBtn = document.getElementById("shuffle") as HTMLElement;
+const filteredSongsContainer = document.getElementById(
+  "filteredSongs"
+) as HTMLElement;
+
 
 
 // functions
@@ -72,16 +76,17 @@ const updatePlayBtnIcon = () => {
 };
 
 const togglePlay = (index: number) => {
+  const prevSrc = audioPlayer.src;
   const { number, title, artist } = playlist[index];
   audioPlayer.src = `./music/music-${number}.mp3`;
-  if (!isPlaying) {
+  if (isPlaying && prevSrc === audioPlayer.src) {
+    audioPlayer.pause();
+    isPlaying = false;
+  } else {
     audioPlayer.play().catch((err) => {
       console.error("Fehler beim Abspielen der Musik:", err);
     });
     isPlaying = true;
-  } else {
-    audioPlayer.pause();
-    isPlaying = false;
   }
   songTitleElement.textContent = title;
   songArtistElement.textContent = artist;
@@ -97,6 +102,41 @@ const toggleSearchbar = () => {
   } else {
     searchbar?.classList.toggle("showSearchbar");
     searchbar?.classList.toggle("hideSearchbar");
+  }
+};
+
+const resetFilteredSongsContainer = () => {
+  filteredSongsContainer.innerHTML = "";
+  filteredSongsContainer.style.display = "none";
+};
+
+const searchSong = () => {
+  resetFilteredSongsContainer();
+  const searchStr = searchbar.value.toLowerCase();
+  if (searchStr.length) {
+    const filteredSongs = playlist.filter(
+      (song) =>
+        song.title.toLowerCase().includes(searchStr) ||
+        song.artist.toLowerCase().includes(searchStr)
+    );
+    filteredSongsContainer &&
+      filteredSongs.forEach(
+        (song) =>
+          (filteredSongsContainer.innerHTML += `<p class="filteredSong" id="filteredSong-${
+            song.number
+          }" onclick="togglePlay(${song.number - 1})">${song.title} by ${
+            song.artist
+          }</p>`)
+      );
+    if (filteredSongs.length) filteredSongsContainer.style.display = "block";
+  }
+};
+
+const handleKeydown = (e) => {
+  if (e.key === "Enter" && searchbar.value) {
+    searchSong();
+  } else if (e.key === "Enter" && !searchbar.value) {
+    alert("Please enter title/ artist to search!");
   }
 };
 
@@ -172,8 +212,11 @@ const formatTime = (timeInSeconds: number) => {
 
 // call the funktions
 document.addEventListener("DOMContentLoaded", () => renderPlaylist());
+document.addEventListener("click", resetFilteredSongsContainer);
 menuBtn?.addEventListener("click", () => container?.classList.toggle("active"));
 searchBtn?.addEventListener("click", toggleSearchbar);
+searchbar?.addEventListener("input", searchSong);
+searchbar?.addEventListener("focus", resetFilteredSongsContainer);
 playBtn?.addEventListener("click", play);
 prevBtn?.addEventListener("click", playPreviousSong);
 nextBtn?.addEventListener("click", playNextSong);
@@ -182,5 +225,4 @@ progressBar.addEventListener('input', () => {
   const newTime = (parseFloat(progressBar.value) / 100) * audioPlayer.duration;
   audioPlayer.currentTime = newTime;
 });
-
 
