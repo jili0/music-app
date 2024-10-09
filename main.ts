@@ -138,6 +138,7 @@ const shuffle = async (e) => {
     audioPlayer.autoplay = false;
     isPlaying = false;
     isShuffling = false;
+    updatePlayBtnIcon();
   }
 };
 

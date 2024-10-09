@@ -134,6 +134,7 @@ const shuffle = (e) => __awaiter(void 0, void 0, void 0, function* () {
         audioPlayer.autoplay = false;
         isPlaying = false;
         isShuffling = false;
+        updatePlayBtnIcon();
     }
 });
 // call the funktions
