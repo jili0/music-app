@@ -53,16 +53,14 @@ const renderPlaylist = () => __awaiter(void 0, void 0, void 0, function* () {
         playlistElement.innerHTML = playlistHTML;
     }
 });
-const togglePlay = (index, shouldToggle = true) => {
+const togglePlay = (index) => {
     const { number, title, artist } = playlist[index];
     audioPlayer.src = `./music/music-${number}.mp3`;
     if (!isPlaying) {
         audioPlayer.play().catch((err) => {
             console.error("Fehler beim Abspielen der Musik:", err);
         });
-        if (shouldToggle) {
-            isPlaying = true;
-        }
+        isPlaying = true;
     }
     else {
         audioPlayer.pause();
@@ -87,7 +85,8 @@ const playPreviousSong = () => __awaiter(void 0, void 0, void 0, function* () {
     playlist = yield fetchData();
     let index = Number(audioPlayer.src.split("").slice(-5, -4).join("")) - 2;
     index < 0 ? (index += playlist.length) : null;
-    togglePlay(index, false);
+    togglePlay(index);
+    console.log(isPlaying);
 });
 const playNextSong = () => __awaiter(void 0, void 0, void 0, function* () {
     audioPlayer.pause();
@@ -95,7 +94,7 @@ const playNextSong = () => __awaiter(void 0, void 0, void 0, function* () {
     playlist = yield fetchData();
     let index = Number(audioPlayer.src.split("").slice(-5, -4).join(""));
     index >= playlist.length ? index -= playlist.length : null;
-    togglePlay(index, false);
+    togglePlay(index);
 });
 const play = () => {
     if (!audioPlayer.src) {
