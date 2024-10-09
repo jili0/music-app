@@ -150,3 +150,4 @@ playBtn?.addEventListener("click", play);
 prevBtn?.addEventListener("click", playPreviousSong);
 nextBtn?.addEventListener("click", playNextSong);
 shuffleBtn?.addEventListener("click", shuffle);
+
