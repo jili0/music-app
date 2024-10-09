@@ -150,15 +150,6 @@ const shuffle = async (e: MouseEvent) => {
   }
 };
 
-// call the funktions
-document.addEventListener("DOMContentLoaded", () => renderPlaylist());
-menuBtn?.addEventListener("click", () => container?.classList.toggle("active"));
-searchBtn?.addEventListener("click", toggleSearchbar);
-playBtn?.addEventListener("click", play);
-prevBtn?.addEventListener("click", playPreviousSong);
-nextBtn?.addEventListener("click", playNextSong);
-shuffleBtn?.addEventListener("click", shuffle);
-
 // Event Listener für die Fortschrittsleiste
 audioPlayer.addEventListener('timeupdate', () => {
   if (audioPlayer.duration && !isNaN(audioPlayer.duration) && audioPlayer.currentTime && !isNaN(audioPlayer.currentTime)) {
@@ -178,7 +169,15 @@ const formatTime = (timeInSeconds: number) => {
   }
 });
 
-// Event Listener für die Benutzer-Interaktion mit der Leiste
+
+// call the funktions
+document.addEventListener("DOMContentLoaded", () => renderPlaylist());
+menuBtn?.addEventListener("click", () => container?.classList.toggle("active"));
+searchBtn?.addEventListener("click", toggleSearchbar);
+playBtn?.addEventListener("click", play);
+prevBtn?.addEventListener("click", playPreviousSong);
+nextBtn?.addEventListener("click", playNextSong);
+shuffleBtn?.addEventListener("click", shuffle);
 progressBar.addEventListener('input', () => {
   const newTime = (parseFloat(progressBar.value) / 100) * audioPlayer.duration;
   audioPlayer.currentTime = newTime;

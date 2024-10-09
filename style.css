@@ -302,8 +302,9 @@ audio {
 .container.active .controls {
   position: absolute;
   width: 260px;
-  bottom: 4px;
-  transform: scale(0.45) translateX(50%);
+  top: 100px;
+  transform: scale(0.45) translateX(40%);
+  gap: 60px;
  
 }
 .controls i:hover {
@@ -357,6 +358,8 @@ audio {
 
 #current-time,
 #duration {
-  font-size: 14px;
+  font-size: 12px;
   color: white;
+  margin-bottom: 5px;
+  margin-right: 5px;
 }
