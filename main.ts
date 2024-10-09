@@ -84,6 +84,8 @@ const toggleSearchbar = () => {
 };
 
 const playPreviousSong = async () => {
+  audioPlayer.pause();
+  isPlaying = false;
   playlist = await fetchData();
   let index = Number(audioPlayer.src.split("").slice(-5, -4).join("")) - 2;
   index < 0 ? (index += playlist.length) : null;
@@ -91,6 +93,8 @@ const playPreviousSong = async () => {
 };
 
 const playNextSong = async () => {
+  audioPlayer.pause();
+  isPlaying = false;
   playlist = await fetchData();
   let index = Number(audioPlayer.src.split("").slice(-5, -4).join(""));
   index >= playlist.length? index -= playlist.length : null;
@@ -103,7 +107,7 @@ const play = () => {
   } else {
     let index = Number(audioPlayer.src.split("").slice(-5, -4).join("")) - 1;
     togglePlay(index);
-  }
+  } 
 };
 
 // call the funktions
