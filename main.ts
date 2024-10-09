@@ -31,6 +31,7 @@ const shuffleBtn = document.getElementById("shuffle") as HTMLElement;
 const filteredSongsContainer = document.getElementById(
   "filteredSongs"
 ) as HTMLElement;
+const albumImg = document.getElementById("coverImg") as HTMLImageElement;
 
 // functions
 
@@ -73,6 +74,10 @@ const updatePlayBtnIcon = () => {
     : playBtn.classList.replace("fa-pause", "fa-play");
 };
 
+const updateAlbumImg = (index: number) => {
+  albumImg.src = `./images/music-${index + 1}.jpg`
+};
+
 const togglePlay = (index: number) => {
   const prevSrc = audioPlayer.src;
   const { number, title, artist } = playlist[index];
@@ -89,6 +94,7 @@ const togglePlay = (index: number) => {
   songTitleElement.textContent = title;
   songArtistElement.textContent = artist;
   updatePlayBtnIcon();
+  updateAlbumImg(index);
 };
 
 const toggleSearchbar = () => {

@@ -28,6 +28,7 @@ const currentTimeDisplay = document.getElementById("currentTime");
 const durationDisplay = document.getElementById("duration");
 const shuffleBtn = document.getElementById("shuffle");
 const filteredSongsContainer = document.getElementById("filteredSongs");
+const albumImg = document.getElementById("coverImg");
 // functions
 const fetchData = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -66,6 +67,9 @@ const updatePlayBtnIcon = () => {
         ? playBtn.classList.replace("fa-play", "fa-pause")
         : playBtn.classList.replace("fa-pause", "fa-play");
 };
+const updateAlbumImg = (index) => {
+    albumImg.src = `./images/music-${index + 1}.jpg`;
+};
 const togglePlay = (index) => {
     const prevSrc = audioPlayer.src;
     const { number, title, artist } = playlist[index];
@@ -83,6 +87,7 @@ const togglePlay = (index) => {
     songTitleElement.textContent = title;
     songArtistElement.textContent = artist;
     updatePlayBtnIcon();
+    updateAlbumImg(index);
 };
 const toggleSearchbar = () => {
     if (!(searchbar === null || searchbar === void 0 ? void 0 : searchbar.classList.contains("showSearchbar")) &&
