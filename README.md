@@ -1,48 +1,36 @@
 # Music App
-
-- Was kann der Benutzer damit tun?
-- Ein Lied abspielen, pausieren, aussuchen/filtern , vor- oder zurückspulen, eine List von den Liedern anzeigen, neue Musik hinzufügen, ein Lied löschen, als "favorita" speichern, Lautstärke regulieren
+## Projektübersicht
+- Lieder abspielen, pausieren, vor- und zurückspulen
+- Lieder filtern und suchen
+- Favoriten speichern
+- Playlist anzeigen
 
 ---
 
-## Gruppe: Dursel, Angelique, Jing 
+## Team: Dursel, Angelique, Jing 
 
-- Gruppenamen?
-- Themen?
+- ### BeatBuilders
+- **Thema**: Musik-App mit interaktiver Playlist
 
-## Das Ziel
+## Ziel des Projekts
 
-- das Erlernte anwenden und uns herausfordern und etwas dazulernen
+- Dieses Projekt dient dem Zweck, unsere Fähigkeiten im Umgang mit TypeScript, CSS und HTML zu erweitern. Wir möchten das Gelernte praktisch anwenden und uns herausfordern, um neue Erfahrungen im Bereich der Frontend-Entwicklung zu sammeln.
+
 
 ## Technologien
-- Typescript
-- Tailwind CSS
-- Html
+- **HTML** - Für die Strukturierung der Benutzeroberfläche
+- **CSS** - Für eine schnelle und responsive Gestaltung des User Interface
+- **Typescript** - Für die strukturierte Programmierung
 
 
-## Ordnerstruktur und Konfigurationen  festlegen
-
-- Html, CSS, usw. 
-- Javascript
-- `.gitignore`
-- `npm run start`
-
-## 5. Projekt in Github anlegen
-
-1. Projekt erstellen
-2. Berechtigung zu den Mirwirkenden teilen
-3. Arbeistbranchs in `git` festlegen:
-   - `git branch html`
-   - `git branch ethoden-js`
-   - usw.
-4. testen arbeit
-
-## 6. Coden /programmieren
-
-1. Funktionen festlegen
-2. Hauptprogramm und Unterprogramme verwenden
-3. Laden die Repository hoch
-4. refactoring
+## Funktionen der App
+- **Abspielen und Pausieren**: Der Benutzer kann ein Lied aus der Playlist abspielen und pausieren.
+- **Vor-und Zurückspringen**: Der Benutzer kann Lieder überspringen oder zurückgehen.
+- **Vor-und Zurückspulen**: Der Benuter kann während der Wiedergabe vor- und zurückspulen.
+- **Favoriten speichern**: Lieder können als Favoriten markiert werden.
+- **Shuffle-Modus**- Zufällige Wiedergabe der Lieder.
 
 
-**Viel Spaß 🏃‍➡️🏃‍➡️ **
+
+
+**Viel Spaß beim Entdecken und Ausprobieren der App! 🎉**
