@@ -12,6 +12,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 let playlist;
 let isPlaying = false;
 let isShuffling = false;
+let isRepeat = false;
 const audioPlayer = document.getElementById("audioPlayer");
 const playlistElement = document.getElementById("playlist");
 const songTitleElement = document.getElementById("infoTitle");
@@ -27,6 +28,7 @@ const progressBar = document.getElementById("progress-bar");
 const currentTimeDisplay = document.getElementById("currentTime");
 const durationDisplay = document.getElementById("duration");
 const shuffleBtn = document.getElementById("shuffle");
+const repeatBtn = document.getElementById("repeat");
 const filteredSongsContainer = document.getElementById("filteredSongs");
 const albumImg = document.getElementById("coverImg");
 let playlistCurrentItem;
@@ -207,6 +209,17 @@ const shuffle = (e) => __awaiter(void 0, void 0, void 0, function* () {
         updatePlayBtnIcon();
     }
 });
+const toggleRepeat = () => {
+    if (!isRepeat) {
+        audioPlayer.loop = true;
+        repeatBtn.style.color = "slateblue";
+    }
+    else {
+        audioPlayer.loop = false;
+        repeatBtn.style.color = "white";
+    }
+    isRepeat = !isRepeat;
+};
 const formatTime = (timeInSeconds) => {
     const minutes = Math.floor(timeInSeconds / 60);
     const seconds = Math.floor(timeInSeconds % 60);
@@ -235,5 +248,6 @@ playBtn === null || playBtn === void 0 ? void 0 : playBtn.addEventListener("clic
 prevBtn === null || prevBtn === void 0 ? void 0 : prevBtn.addEventListener("click", playPreviousSong);
 nextBtn === null || nextBtn === void 0 ? void 0 : nextBtn.addEventListener("click", playNextSong);
 shuffleBtn === null || shuffleBtn === void 0 ? void 0 : shuffleBtn.addEventListener("click", shuffle);
+repeatBtn.addEventListener("click", toggleRepeat);
 audioPlayer === null || audioPlayer === void 0 ? void 0 : audioPlayer.addEventListener("timeupdate", updateTime);
 progressBar === null || progressBar === void 0 ? void 0 : progressBar.addEventListener("input", setCurrentTime);
