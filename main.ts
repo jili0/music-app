@@ -35,6 +35,9 @@ const filteredSongsContainer = document.getElementById(
 ) as HTMLElement;
 const albumImg = document.getElementById("coverImg") as HTMLImageElement;
 let playlistCurrentItem: HTMLParagraphElement | null;
+let playlistCurrentLikeBtn: HTMLParagraphElement | null;
+let localStoragePlaylist: string  | Array<object | null>;
+const footerLikeBtn = document.getElementById("footerLikeBtn") as HTMLElement;
 
 // functions
 
@@ -42,10 +45,19 @@ const fetchData = async (): Promise<Song[]> => {
   try {
     const response = await fetch("./data/songs.json");
     const jsonData: Song[] = await response.json();
+    localStorage.setItem("data", JSON.stringify(jsonData));
     return jsonData;
   } catch (err) {
     console.log(err);
     return [];
+  }
+};
+
+const postData = async (): Promise<void> => {
+  try {
+    // const body = JSON.stringify();
+  } catch (err) {
+    console.log(err);
   }
 };
 
@@ -60,7 +72,7 @@ const renderPlaylist = async (): Promise<void> => {
           <p class="title">${song.title}</p>
           <p class="artist">${song.artist}</p>
           <p class="length">${song.length}</p>
-          <i class="fas fa-heart"></i>
+          <i class="fas fa-heart" id="playlistItemLikeBtn-${index}"></i>
         </div>
         `;
       })
@@ -68,6 +80,7 @@ const renderPlaylist = async (): Promise<void> => {
     playlistElement.innerHTML = playlistHTML;
     songTitleElement.textContent = playlist[0].title;
     songArtistElement.textContent = playlist[0].artist;
+    playlist.forEach((i, index) => updatePlaylistLikeBtn(index));
   }
 };
 
@@ -85,14 +98,28 @@ const updatePlaylistStatus = (index: number) => {
   playlistCurrentItem = document.getElementById(
     `playlistItem-${index}`
   ) as HTMLParagraphElement;
+
   if (
     audioPlayer.src.includes(`/music/music-${index + 1}.mp3`) &&
     !audioPlayer.paused
   ) {
     playlistCurrentItem!.innerHTML = "<i class='fa fa-pause'></i>";
   } else {
-    console.log("else")
-    playlistCurrentItem!.innerHTML =`${index + 1}`
+    playlistCurrentItem!.innerHTML = `${index + 1}`;
+  }
+};
+
+const updatePlaylistLikeBtn = (index: number) => {
+  playlistCurrentLikeBtn = document.getElementById(
+    `playlistItemLikeBtn-${index}`
+  ) as HTMLParagraphElement;
+  localStoragePlaylist = JSON.parse(
+    localStorage.getItem("data") as string
+  ) as Array<object>;
+  if (localStoragePlaylist && localStoragePlaylist[index].isFavorite) {
+    playlistCurrentLikeBtn.style.color = "red";
+  } else {
+    playlistCurrentLikeBtn.style.color = "white";
   }
 };
 
@@ -117,6 +144,8 @@ const togglePlay = (index: number) => {
   songArtistElement.textContent = artist;
   updatePlayBtnIcon();
   updateAlbumImg(index);
+  playlist.forEach((song, index) => updatePlaylistLikeBtn(index));
+  updateFooterLikeBtn();
 };
 
 const toggleSearchbar = () => {
@@ -167,16 +196,22 @@ const handleKeydown = (e: KeyboardEvent) => {
 };
 
 // Favourits fa-heart
-const toggleFavorite = (event: Event) => {
-  const heartIcon = event.target as HTMLElement;
-  
-  if (heartIcon.classList.contains("favorite")) {
-    heartIcon.classList.remove("favorite");
-    heartIcon.style.color = "white"; 
+const toggleFavorite = () => {
+  localStoragePlaylist = JSON.parse(localStorage.getItem("data") as string);
+  let index;
+  if (!audioPlayer.src) {
+    index = 0;
   } else {
-    heartIcon.classList.add("favorite");
-    heartIcon.style.color = "rgb(80, 71, 143)"; 
+    index = Number(audioPlayer.src.split("").slice(-5, -4).join("")) - 1;
   }
+  if (localStoragePlaylist[index].isFavorite === false) {
+    localStoragePlaylist[index].isFavorite = true;
+  } else {
+    localStoragePlaylist[index].isFavorite = false;
+  }
+  localStorage.setItem("data", JSON.stringify(localStoragePlaylist));
+  playlist.forEach((i, index) => updatePlaylistLikeBtn(index));
+  updateFooterLikeBtn()
 };
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -187,6 +222,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 // end favourits
+
 const playPreviousSong = async () => {
   audioPlayer.pause();
   isPlaying = false;
@@ -194,7 +230,6 @@ const playPreviousSong = async () => {
   let index = Number(audioPlayer.src.split("").slice(-5, -4).join("")) - 2;
   index < 0 ? (index += playlist.length) : null;
   togglePlay(index);
-  console.log(isPlaying);
 };
 
 const playNextSong = async () => {
@@ -268,10 +303,28 @@ const updateTime = () => {
   }
 };
 
+const updateFooterLikeBtn = () => {
+  let currentSongIndex = Number(audioPlayer.src.split("").slice(-5, -4).join("")) - 1;
+  console.log("update footer like", currentSongIndex);
+  localStoragePlaylist = JSON.parse(
+    localStorage.getItem("data") as string
+  ) as Array<object>;
+  if (localStoragePlaylist && localStoragePlaylist?[currentSongIndex].isFavorite) {
+    footerLikeBtn.style.color = "red";
+  } else {
+    footerLikeBtn.style.color = "white";
+  }
+};
+
+const handleMenuBtnKlick = () => {
+  container?.classList.toggle("active");
+  updateFooterLikeBtn(e);
+};
+
 // call the funktions
 document.addEventListener("DOMContentLoaded", () => renderPlaylist());
 document.addEventListener("click", resetFilteredSongsContainer);
-menuBtn?.addEventListener("click", () => container?.classList.toggle("active"));
+menuBtn?.addEventListener("click", handleMenuBtnKlick);
 searchBtn?.addEventListener("click", toggleSearchbar);
 searchbar?.addEventListener("input", searchSong);
 searchbar?.addEventListener("focus", resetFilteredSongsContainer);

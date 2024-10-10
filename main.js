@@ -32,16 +32,28 @@ const repeatBtn = document.getElementById("repeat");
 const filteredSongsContainer = document.getElementById("filteredSongs");
 const albumImg = document.getElementById("coverImg");
 let playlistCurrentItem;
+let playlistCurrentLikeBtn;
+let localStoragePlaylist;
+const footerLikeBtn = document.getElementById("footerLikeBtn");
 // functions
 const fetchData = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const response = yield fetch("./data/songs.json");
         const jsonData = yield response.json();
+        localStorage.setItem("data", JSON.stringify(jsonData));
         return jsonData;
     }
     catch (err) {
         console.log(err);
         return [];
+    }
+});
+const postData = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        // const body = JSON.stringify();
+    }
+    catch (err) {
+        console.log(err);
     }
 });
 const renderPlaylist = () => __awaiter(void 0, void 0, void 0, function* () {
@@ -55,7 +67,7 @@ const renderPlaylist = () => __awaiter(void 0, void 0, void 0, function* () {
           <p class="title">${song.title}</p>
           <p class="artist">${song.artist}</p>
           <p class="length">${song.length}</p>
-          <i class="fas fa-heart"></i>
+          <i class="fas fa-heart" id="playlistItemLikeBtn-${index}"></i>
         </div>
         `;
         })
@@ -63,6 +75,7 @@ const renderPlaylist = () => __awaiter(void 0, void 0, void 0, function* () {
         playlistElement.innerHTML = playlistHTML;
         songTitleElement.textContent = playlist[0].title;
         songArtistElement.textContent = playlist[0].artist;
+        playlist.forEach((i, index) => updatePlaylistLikeBtn(index));
     }
 });
 const updatePlayBtnIcon = () => {
@@ -80,8 +93,17 @@ const updatePlaylistStatus = (index) => {
         playlistCurrentItem.innerHTML = "<i class='fa fa-pause'></i>";
     }
     else {
-        console.log("else");
         playlistCurrentItem.innerHTML = `${index + 1}`;
+    }
+};
+const updatePlaylistLikeBtn = (index) => {
+    playlistCurrentLikeBtn = document.getElementById(`playlistItemLikeBtn-${index}`);
+    localStoragePlaylist = JSON.parse(localStorage.getItem("data"));
+    if (localStoragePlaylist && localStoragePlaylist[index].isFavorite) {
+        playlistCurrentLikeBtn.style.color = "red";
+    }
+    else {
+        playlistCurrentLikeBtn.style.color = "white";
     }
 };
 const togglePlay = (index) => {
@@ -107,6 +129,8 @@ const togglePlay = (index) => {
     songArtistElement.textContent = artist;
     updatePlayBtnIcon();
     updateAlbumImg(index);
+    playlist.forEach((song, index) => updatePlaylistLikeBtn(index));
+    updateFooterLikeBtn();
 };
 const toggleSearchbar = () => {
     if (!(searchbar === null || searchbar === void 0 ? void 0 : searchbar.classList.contains("showSearchbar")) &&
@@ -143,16 +167,24 @@ const handleKeydown = (e) => {
     }
 };
 // Favourits fa-heart
-const toggleFavorite = (event) => {
-    const heartIcon = event.target;
-    if (heartIcon.classList.contains("favorite")) {
-        heartIcon.classList.remove("favorite");
-        heartIcon.style.color = "white";
+const toggleFavorite = () => {
+    localStoragePlaylist = JSON.parse(localStorage.getItem("data"));
+    let index;
+    if (!audioPlayer.src) {
+        index = 0;
     }
     else {
-        heartIcon.classList.add("favorite");
-        heartIcon.style.color = "rgb(80, 71, 143)";
+        index = Number(audioPlayer.src.split("").slice(-5, -4).join("")) - 1;
     }
+    if (localStoragePlaylist[index].isFavorite === false) {
+        localStoragePlaylist[index].isFavorite = true;
+    }
+    else {
+        localStoragePlaylist[index].isFavorite = false;
+    }
+    localStorage.setItem("data", JSON.stringify(localStoragePlaylist));
+    playlist.forEach((i, index) => updatePlaylistLikeBtn(index));
+    updateFooterLikeBtn();
 };
 document.addEventListener("DOMContentLoaded", () => {
     const heartIcons = document.querySelectorAll(".fa-heart");
@@ -168,7 +200,6 @@ const playPreviousSong = () => __awaiter(void 0, void 0, void 0, function* () {
     let index = Number(audioPlayer.src.split("").slice(-5, -4).join("")) - 2;
     index < 0 ? (index += playlist.length) : null;
     togglePlay(index);
-    console.log(isPlaying);
 });
 const playNextSong = () => __awaiter(void 0, void 0, void 0, function* () {
     audioPlayer.pause();
@@ -237,10 +268,25 @@ const updateTime = () => {
         durationDisplay.textContent = formatTime(audioPlayer.duration);
     }
 };
+const updateFooterLikeBtn = () => {
+    let currentSongIndex = Number(audioPlayer.src.split("").slice(-5, -4).join("")) - 1;
+    console.log("update footer like", currentSongIndex);
+    localStoragePlaylist = JSON.parse(localStorage.getItem("data"));
+    if (localStoragePlaylist && localStoragePlaylist ? [currentSongIndex].isFavorite : ) {
+        footerLikeBtn.style.color = "red";
+    }
+    else {
+        footerLikeBtn.style.color = "white";
+    }
+};
+const handleMenuBtnKlick = () => {
+    container === null || container === void 0 ? void 0 : container.classList.toggle("active");
+    updateFooterLikeBtn(e);
+};
 // call the funktions
 document.addEventListener("DOMContentLoaded", () => renderPlaylist());
 document.addEventListener("click", resetFilteredSongsContainer);
-menuBtn === null || menuBtn === void 0 ? void 0 : menuBtn.addEventListener("click", () => container === null || container === void 0 ? void 0 : container.classList.toggle("active"));
+menuBtn === null || menuBtn === void 0 ? void 0 : menuBtn.addEventListener("click", handleMenuBtnKlick);
 searchBtn === null || searchBtn === void 0 ? void 0 : searchBtn.addEventListener("click", toggleSearchbar);
 searchbar === null || searchbar === void 0 ? void 0 : searchbar.addEventListener("input", searchSong);
 searchbar === null || searchbar === void 0 ? void 0 : searchbar.addEventListener("focus", resetFilteredSongsContainer);
