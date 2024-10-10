@@ -281,7 +281,7 @@ const updateFooterLikeBtn = () => {
 };
 const handleMenuBtnKlick = () => {
     container === null || container === void 0 ? void 0 : container.classList.toggle("active");
-    updateFooterLikeBtn(e);
+    updateFooterLikeBtn();
 };
 // call the funktions
 document.addEventListener("DOMContentLoaded", () => renderPlaylist());
