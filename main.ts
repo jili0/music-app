@@ -3,6 +3,7 @@
 let playlist: Song[];
 let isPlaying: boolean = false;
 let isShuffling: boolean = false;
+let isRepeat: boolean = false;
 
 interface Song {
   number: number;
@@ -28,6 +29,7 @@ const currentTimeDisplay = document.getElementById(
 ) as HTMLElement;
 const durationDisplay = document.getElementById("duration") as HTMLElement;
 const shuffleBtn = document.getElementById("shuffle") as HTMLElement;
+const repeatBtn = document.getElementById("repeat") as HTMLElement;
 const filteredSongsContainer = document.getElementById(
   "filteredSongs"
 ) as HTMLElement;
@@ -235,6 +237,17 @@ const shuffle = async (e: MouseEvent) => {
   }
 };
 
+const toggleRepeat = () => {
+  if(!isRepeat) {
+    audioPlayer.loop = true;
+    repeatBtn.style.color = "slateblue";
+  }else {
+    audioPlayer.loop = false;
+    repeatBtn.style.color = "white";
+}
+isRepeat = !isRepeat;
+};
+
 const formatTime = (timeInSeconds: number) => {
   const minutes = Math.floor(timeInSeconds / 60);
   const seconds = Math.floor(timeInSeconds % 60);
@@ -266,5 +279,6 @@ playBtn?.addEventListener("click", play);
 prevBtn?.addEventListener("click", playPreviousSong);
 nextBtn?.addEventListener("click", playNextSong);
 shuffleBtn?.addEventListener("click", shuffle);
+repeatBtn.addEventListener("click", toggleRepeat);
 audioPlayer?.addEventListener("timeupdate", updateTime);
 progressBar?.addEventListener("input", setCurrentTime);
