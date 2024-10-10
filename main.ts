@@ -305,7 +305,7 @@ const updateFooterLikeBtn = () => {
 
 const handleMenuBtnKlick = () => {
   container?.classList.toggle("active");
-  updateFooterLikeBtn(e);
+  updateFooterLikeBtn();
 };
 
 // call the funktions
