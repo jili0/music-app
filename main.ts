@@ -4,7 +4,6 @@ let playlist: Song[];
 let isPlaying: boolean = false;
 let isShuffling: boolean = false;
 
-
 interface Song {
   number: number;
   title: string;
@@ -12,23 +11,28 @@ interface Song {
   length: string;
 }
 
-
-const audioPlayer = document.getElementById("audio-player") as HTMLAudioElement;
+const audioPlayer = document.getElementById("audioPlayer") as HTMLAudioElement;
 const playlistElement = document.getElementById("playlist") as HTMLElement;
 const songTitleElement = document.getElementById("infoTitle") as HTMLElement;
 const songArtistElement = document.getElementById("infoArtist") as HTMLElement;
-const menuBtn = document.getElementById("menu-btn") as HTMLElement;
+const menuBtn = document.getElementById("menuBtn") as HTMLElement;
 const container = document.getElementById("container") as HTMLElement;
 const searchBtn = document.getElementById("searchBtn") as HTMLElement;
-const searchbar = document.getElementById("searchbar") as HTMLElement;
+const searchbar = document.getElementById("searchbar") as HTMLInputElement;
 const prevBtn = document.getElementById("prev") as HTMLElement;
 const playBtn = document.getElementById("play") as HTMLElement;
 const nextBtn = document.getElementById("next") as HTMLElement;
-const progressBar = document.getElementById('progress-bar') as HTMLInputElement;
-const currentTimeDisplay = document.getElementById('current-time') as HTMLElement;
-const durationDisplay = document.getElementById('duration') as HTMLElement;
+const progressBar = document.getElementById("progress-bar") as HTMLInputElement;
+const currentTimeDisplay = document.getElementById(
+  "currentTime"
+) as HTMLElement;
+const durationDisplay = document.getElementById("duration") as HTMLElement;
 const shuffleBtn = document.getElementById("shuffle") as HTMLElement;
-
+const filteredSongsContainer = document.getElementById(
+  "filteredSongs"
+) as HTMLElement;
+const albumImg = document.getElementById("coverImg") as HTMLImageElement;
+let playlistCurrentItem: HTMLParagraphElement | null;
 
 // functions
 
@@ -49,12 +53,12 @@ const renderPlaylist = async (): Promise<void> => {
     const playlistHTML = playlist
       .map((song, index) => {
         return `
-        <div class="song" data-audio="./music/music-${song.number}.mp3" data-title="${song.title}" data-artist="${song.artist}" onclick="togglePlay(${index})">
-          <div class="number">${song.number}</div>
-          <div class="title">${song.title}</div>
-          <div class="artist">${song.artist}</div>
-          <div class="length">${song.length}</div>
-          <div><i class="fas fa-heart"></i></div>
+        <div class="playlistItem" data-audio="./music/music-${song.number}.mp3" data-title="${song.title}" data-artist="${song.artist}" onclick="togglePlay(${index})">
+          <p class="number" id="playlistItem-${index}">${song.number}</p>
+          <p class="title">${song.title}</p>
+          <p class="artist">${song.artist}</p>
+          <p class="length">${song.length}</p>
+          <i class="fas fa-heart"></i>
         </div>
         `;
       })
@@ -71,21 +75,46 @@ const updatePlayBtnIcon = () => {
     : playBtn.classList.replace("fa-pause", "fa-play");
 };
 
+const updateAlbumImg = (index: number) => {
+  albumImg.src = `./images/music-${index + 1}.jpg`;
+};
+
+const updatePlaylistStatus = (index: number) => {
+  playlistCurrentItem = document.getElementById(
+    `playlistItem-${index}`
+  ) as HTMLParagraphElement;
+  if (
+    audioPlayer.src.includes(`/music/music-${index + 1}.mp3`) &&
+    !audioPlayer.paused
+  ) {
+    playlistCurrentItem!.innerHTML = "<i class='fa fa-pause'></i>";
+  } else {
+    console.log("else")
+    playlistCurrentItem!.innerHTML =`${index + 1}`
+  }
+};
+
 const togglePlay = (index: number) => {
+  searchbar.value = "";
+  if (searchbar?.classList.contains("showSearchbar")) toggleSearchbar();
+  const prevSrc = audioPlayer.src;
   const { number, title, artist } = playlist[index];
   audioPlayer.src = `./music/music-${number}.mp3`;
-  if (!isPlaying) {
+  if (isPlaying && prevSrc === audioPlayer.src) {
+    audioPlayer.pause();
+    isPlaying = false;
+    updatePlaylistStatus(index);
+  } else {
     audioPlayer.play().catch((err) => {
       console.error("Fehler beim Abspielen der Musik:", err);
     });
     isPlaying = true;
-  } else {
-    audioPlayer.pause();
-    isPlaying = false;
+    updatePlaylistStatus(index);
   }
   songTitleElement.textContent = title;
   songArtistElement.textContent = artist;
   updatePlayBtnIcon();
+  updateAlbumImg(index);
 };
 
 const toggleSearchbar = () => {
@@ -100,6 +129,62 @@ const toggleSearchbar = () => {
   }
 };
 
+const resetFilteredSongsContainer = () => {
+  filteredSongsContainer.innerHTML = "";
+  filteredSongsContainer.style.display = "none";
+};
+
+const searchSong = () => {
+  resetFilteredSongsContainer();
+  const searchStr = searchbar.value.toLowerCase();
+  if (searchStr.length) {
+    const filteredSongs = playlist.filter(
+      (song) =>
+        song.title.toLowerCase().includes(searchStr) ||
+        song.artist.toLowerCase().includes(searchStr)
+    );
+    filteredSongsContainer &&
+      filteredSongs.forEach(
+        (song) =>
+          (filteredSongsContainer.innerHTML += `<p class="filteredSong" id="filteredSong-${
+            song.number
+          }" onclick="togglePlay(${song.number - 1})">${song.title} by ${
+            song.artist
+          }</p>`)
+      );
+    if (filteredSongs.length) filteredSongsContainer.style.display = "block";
+  }
+};
+
+const handleKeydown = (e: KeyboardEvent) => {
+  if (e.key === "Enter" && searchbar.value) {
+    searchSong();
+  } else if (e.key === "Enter" && !searchbar.value) {
+    alert("Please enter title/ artist to search!");
+  }
+};
+
+// Favourits fa-heart
+const toggleFavorite = (event: Event) => {
+  const heartIcon = event.target as HTMLElement;
+  
+  if (heartIcon.classList.contains("favorite")) {
+    heartIcon.classList.remove("favorite");
+    heartIcon.style.color = "white"; 
+  } else {
+    heartIcon.classList.add("favorite");
+    heartIcon.style.color = "rgb(80, 71, 143)"; 
+  }
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+  const heartIcons = document.querySelectorAll(".fa-heart");
+
+  heartIcons.forEach((heartIcon) => {
+    heartIcon.addEventListener("click", toggleFavorite);
+  });
+});
+// end favourits
 const playPreviousSong = async () => {
   audioPlayer.pause();
   isPlaying = false;
@@ -150,37 +235,36 @@ const shuffle = async (e: MouseEvent) => {
   }
 };
 
-// Event Listener für die Fortschrittsleiste
-audioPlayer.addEventListener('timeupdate', () => {
-  if (audioPlayer.duration && !isNaN(audioPlayer.duration) && audioPlayer.currentTime && !isNaN(audioPlayer.currentTime)) {
-    const progress = (audioPlayer.currentTime / audioPlayer.duration) * 100;
-    progressBar.value = progress.toString();
-
-// Hilfsfunktion für das Formatieren der Zeit (Sekunden -> Minuten:Sekunden)
 const formatTime = (timeInSeconds: number) => {
   const minutes = Math.floor(timeInSeconds / 60);
   const seconds = Math.floor(timeInSeconds % 60);
-  return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+  return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
 };
 
- // Zeige aktuelle Zeit und Dauer in Minuten:Sekunden an
+const setCurrentTime = () => {
+  const newTime = (parseFloat(progressBar.value) / 100) * audioPlayer.duration;
+  audioPlayer.currentTime = newTime;
+};
+
+const updateTime = () => {
+  if (!isNaN(audioPlayer.duration) && !isNaN(audioPlayer.currentTime)) {
+    const progress = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+    progressBar.value = progress.toFixed(1).toString();
     currentTimeDisplay.textContent = formatTime(audioPlayer.currentTime);
     durationDisplay.textContent = formatTime(audioPlayer.duration);
   }
-});
-
+};
 
 // call the funktions
 document.addEventListener("DOMContentLoaded", () => renderPlaylist());
+document.addEventListener("click", resetFilteredSongsContainer);
 menuBtn?.addEventListener("click", () => container?.classList.toggle("active"));
 searchBtn?.addEventListener("click", toggleSearchbar);
+searchbar?.addEventListener("input", searchSong);
+searchbar?.addEventListener("focus", resetFilteredSongsContainer);
 playBtn?.addEventListener("click", play);
 prevBtn?.addEventListener("click", playPreviousSong);
 nextBtn?.addEventListener("click", playNextSong);
 shuffleBtn?.addEventListener("click", shuffle);
-progressBar.addEventListener('input', () => {
-  const newTime = (parseFloat(progressBar.value) / 100) * audioPlayer.duration;
-  audioPlayer.currentTime = newTime;
-});
-
-
+audioPlayer?.addEventListener("timeupdate", updateTime);
+progressBar?.addEventListener("input", setCurrentTime);
