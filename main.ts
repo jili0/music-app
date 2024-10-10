@@ -266,6 +266,7 @@ const shuffle = async (e: MouseEvent) => {
   }
 };
 
+
 const toggleRepeat = () => {
   if(!isRepeat) {
     audioPlayer.loop = true;
@@ -277,6 +278,7 @@ const toggleRepeat = () => {
 isRepeat = !isRepeat;
 };
 
+// functions - others
 const formatTime = (timeInSeconds: number) => {
   const minutes = Math.floor(timeInSeconds / 60);
   const seconds = Math.floor(timeInSeconds % 60);
@@ -321,13 +323,6 @@ const handleMenuBtnKlick = () => {
 
 // call the funktions
 document.addEventListener("DOMContentLoaded", () => renderPlaylist());
-// document.addEventListener("DOMContentLoaded", () => {
-//   const heartIcons = document.querySelectorAll(".fa-heart");
-
-//   heartIcons.forEach((heartIcon) => {
-//     heartIcon.addEventListener("click", toggleFavorite);
-//   });
-// });
 document.addEventListener("click", resetFilteredSongsContainer);
 menuBtn?.addEventListener("click", handleMenuBtnKlick);
 searchBtn?.addEventListener("click", toggleSearchbar);
