@@ -32,6 +32,7 @@ const filteredSongsContainer = document.getElementById(
   "filteredSongs"
 ) as HTMLElement;
 const albumImg = document.getElementById("coverImg") as HTMLImageElement;
+let playlistCurrentItem: HTMLParagraphElement | null;
 
 // functions
 
@@ -53,10 +54,10 @@ const renderPlaylist = async (): Promise<void> => {
       .map((song, index) => {
         return `
         <div class="playlistItem" data-audio="./music/music-${song.number}.mp3" data-title="${song.title}" data-artist="${song.artist}" onclick="togglePlay(${index})">
-          <div class="number">${song.number}</div>
-          <div class="title">${song.title}</div>
-          <div class="artist">${song.artist}</div>
-          <div class="length">${song.length}</div>
+          <p class="number" id="playlistItem-${index}">${song.number}</p>
+          <p class="title">${song.title}</p>
+          <p class="artist">${song.artist}</p>
+          <p class="length">${song.length}</p>
           <i class="fas fa-heart"></i>
         </div>
         `;
@@ -78,20 +79,37 @@ const updateAlbumImg = (index: number) => {
   albumImg.src = `./images/music-${index + 1}.jpg`;
 };
 
+const updatePlaylistStatus = (index: number) => {
+  playlistCurrentItem = document.getElementById(
+    `playlistItem-${index}`
+  ) as HTMLParagraphElement;
+  if (
+    audioPlayer.src.includes(`/music/music-${index + 1}.mp3`) &&
+    !audioPlayer.paused
+  ) {
+    playlistCurrentItem!.innerHTML = "<i class='fa fa-pause'></i>";
+  } else {
+    console.log("else")
+    playlistCurrentItem!.innerHTML =`${index + 1}`
+  }
+};
+
 const togglePlay = (index: number) => {
   searchbar.value = "";
-  if (searchbar?.classList.contains("showSearchbar"))toggleSearchbar();
+  if (searchbar?.classList.contains("showSearchbar")) toggleSearchbar();
   const prevSrc = audioPlayer.src;
   const { number, title, artist } = playlist[index];
   audioPlayer.src = `./music/music-${number}.mp3`;
   if (isPlaying && prevSrc === audioPlayer.src) {
     audioPlayer.pause();
     isPlaying = false;
+    updatePlaylistStatus(index);
   } else {
     audioPlayer.play().catch((err) => {
       console.error("Fehler beim Abspielen der Musik:", err);
     });
     isPlaying = true;
+    updatePlaylistStatus(index);
   }
   songTitleElement.textContent = title;
   songArtistElement.textContent = artist;
@@ -146,6 +164,27 @@ const handleKeydown = (e: KeyboardEvent) => {
   }
 };
 
+// Favourits fa-heart
+const toggleFavorite = (event: Event) => {
+  const heartIcon = event.target as HTMLElement;
+  
+  if (heartIcon.classList.contains("favorite")) {
+    heartIcon.classList.remove("favorite");
+    heartIcon.style.color = "white"; 
+  } else {
+    heartIcon.classList.add("favorite");
+    heartIcon.style.color = "rgb(80, 71, 143)"; 
+  }
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+  const heartIcons = document.querySelectorAll(".fa-heart");
+
+  heartIcons.forEach((heartIcon) => {
+    heartIcon.addEventListener("click", toggleFavorite);
+  });
+});
+// end favourits
 const playPreviousSong = async () => {
   audioPlayer.pause();
   isPlaying = false;

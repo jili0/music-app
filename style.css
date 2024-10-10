@@ -21,7 +21,8 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  height: 35rem;
+  height: 34rem;
+  max-height: 100vh;
   width: 20rem;
   padding: 0.4rem;
   font-family: "Noto-Sans", sans-serif;
@@ -292,7 +293,7 @@ audio {
   position: absolute;
   left: 0;
   bottom: 2rem;
-  height: 21rem;
+  height: 20rem;
   overflow-x: hidden;
   overflow-y: auto;
   transition: all 0.1s;
