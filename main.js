@@ -29,6 +29,7 @@ const durationDisplay = document.getElementById("duration");
 const shuffleBtn = document.getElementById("shuffle");
 const filteredSongsContainer = document.getElementById("filteredSongs");
 const albumImg = document.getElementById("coverImg");
+let playlistCurrentItem;
 // functions
 const fetchData = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -48,10 +49,10 @@ const renderPlaylist = () => __awaiter(void 0, void 0, void 0, function* () {
             .map((song, index) => {
             return `
         <div class="playlistItem" data-audio="./music/music-${song.number}.mp3" data-title="${song.title}" data-artist="${song.artist}" onclick="togglePlay(${index})">
-          <div class="number">${song.number}</div>
-          <div class="title">${song.title}</div>
-          <div class="artist">${song.artist}</div>
-          <div class="length">${song.length}</div>
+          <p class="number" id="playlistItem-${index}">${song.number}</p>
+          <p class="title">${song.title}</p>
+          <p class="artist">${song.artist}</p>
+          <p class="length">${song.length}</p>
           <i class="fas fa-heart"></i>
         </div>
         `;
@@ -70,6 +71,17 @@ const updatePlayBtnIcon = () => {
 const updateAlbumImg = (index) => {
     albumImg.src = `./images/music-${index + 1}.jpg`;
 };
+const updatePlaylistStatus = (index) => {
+    playlistCurrentItem = document.getElementById(`playlistItem-${index}`);
+    if (audioPlayer.src.includes(`/music/music-${index + 1}.mp3`) &&
+        !audioPlayer.paused) {
+        playlistCurrentItem.innerHTML = "<i class='fa fa-pause'></i>";
+    }
+    else {
+        console.log("else");
+        playlistCurrentItem.innerHTML = `${index + 1}`;
+    }
+};
 const togglePlay = (index) => {
     searchbar.value = "";
     if (searchbar === null || searchbar === void 0 ? void 0 : searchbar.classList.contains("showSearchbar"))
@@ -80,12 +92,14 @@ const togglePlay = (index) => {
     if (isPlaying && prevSrc === audioPlayer.src) {
         audioPlayer.pause();
         isPlaying = false;
+        updatePlaylistStatus(index);
     }
     else {
         audioPlayer.play().catch((err) => {
             console.error("Fehler beim Abspielen der Musik:", err);
         });
         isPlaying = true;
+        updatePlaylistStatus(index);
     }
     songTitleElement.textContent = title;
     songArtistElement.textContent = artist;
