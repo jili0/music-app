@@ -259,7 +259,7 @@ const updateFooterLikeBtn = () => {
     let currentSongIndex = Number(audioPlayer.src.split("").slice(-5, -4).join("")) - 1;
     console.log("update footer like", currentSongIndex);
     localStoragePlaylist = JSON.parse(localStorage.getItem("data"));
-    if (localStoragePlaylist && localStoragePlaylist ? [currentSongIndex].isFavorite : ) {
+    if (localStoragePlaylist && localStoragePlaylist[currentSongIndex].isFavorite) {
         footerLikeBtn.style.color = "red";
     }
     else {
