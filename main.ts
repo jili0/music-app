@@ -309,7 +309,7 @@ const updateFooterLikeBtn = () => {
   localStoragePlaylist = JSON.parse(
     localStorage.getItem("data") as string
   ) as Array<object>;
-  if (localStoragePlaylist && localStoragePlaylist?[currentSongIndex].isFavorite) {
+  if (localStoragePlaylist && localStoragePlaylist[currentSongIndex].isFavorite) {
     footerLikeBtn.style.color = "red";
   } else {
     footerLikeBtn.style.color = "white";
