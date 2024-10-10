@@ -234,6 +234,7 @@ const shuffle = (e) => __awaiter(void 0, void 0, void 0, function* () {
         updatePlayBtnIcon();
     }
 });
+// functions - others
 const formatTime = (timeInSeconds) => {
     const minutes = Math.floor(timeInSeconds / 60);
     const seconds = Math.floor(timeInSeconds % 60);
@@ -269,12 +270,6 @@ const handleMenuBtnKlick = () => {
 };
 // call the funktions
 document.addEventListener("DOMContentLoaded", () => renderPlaylist());
-// document.addEventListener("DOMContentLoaded", () => {
-//   const heartIcons = document.querySelectorAll(".fa-heart");
-//   heartIcons.forEach((heartIcon) => {
-//     heartIcon.addEventListener("click", toggleFavorite);
-//   });
-// });
 document.addEventListener("click", resetFilteredSongsContainer);
 menuBtn === null || menuBtn === void 0 ? void 0 : menuBtn.addEventListener("click", handleMenuBtnKlick);
 searchBtn === null || searchBtn === void 0 ? void 0 : searchBtn.addEventListener("click", toggleSearchbar);
