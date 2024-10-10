@@ -34,7 +34,7 @@ const filteredSongsContainer = document.getElementById(
 const albumImg = document.getElementById("coverImg") as HTMLImageElement;
 let playlistCurrentItem: HTMLParagraphElement | null;
 let playlistCurrentLikeBtn: HTMLParagraphElement | null;
-let localStoragePlaylist: string  | Array<object | null>;
+let localStoragePlaylist: string | Array<object | null>;
 const footerLikeBtn = document.getElementById("footerLikeBtn") as HTMLElement;
 
 // functions
@@ -59,6 +59,50 @@ const postData = async (): Promise<void> => {
   }
 };
 
+// functions - for searchbar
+const toggleSearchbar = () => {
+  if (
+    !searchbar?.classList.contains("showSearchbar") &&
+    !searchbar?.classList.contains("hideSearchbar")
+  ) {
+    searchbar?.classList.add("showSearchbar");
+  } else {
+    searchbar?.classList.toggle("showSearchbar");
+    searchbar?.classList.toggle("hideSearchbar");
+  }
+};
+
+const searchSong = () => {
+  resetFilteredSongsContainer();
+  const searchStr = searchbar.value.toLowerCase();
+  if (searchStr.length) {
+    const filteredSongs = playlist.filter(
+      (song) =>
+        song.title.toLowerCase().includes(searchStr) ||
+        song.artist.toLowerCase().includes(searchStr)
+    );
+    filteredSongsContainer &&
+      filteredSongs.forEach(
+        (song) =>
+          (filteredSongsContainer.innerHTML += `<p class="filteredSong" id="filteredSong-${
+            song.number
+          }" onclick="togglePlay(${song.number - 1})">${song.title} by ${
+            song.artist
+          }</p>`)
+      );
+    if (filteredSongs.length) filteredSongsContainer.style.display = "block";
+  }
+};
+
+const handleKeydown = (e: KeyboardEvent) => {
+  if (e.key === "Enter" && searchbar.value) {
+    searchSong();
+  } else if (e.key === "Enter" && !searchbar.value) {
+    alert("Please enter title/ artist to search!");
+  }
+};
+
+// functions - render/update Display
 const renderPlaylist = async (): Promise<void> => {
   playlist = await fetchData();
   if (playlistElement) {
@@ -70,7 +114,7 @@ const renderPlaylist = async (): Promise<void> => {
           <p class="title">${song.title}</p>
           <p class="artist">${song.artist}</p>
           <p class="length">${song.length}</p>
-          <i class="fas fa-heart" id="playlistItemLikeBtn-${index}"></i>
+          <i class="fas fa-heart" id="playlistItemLikeBtn-${index}" onclick=""></i>
         </div>
         `;
       })
@@ -121,6 +165,30 @@ const updatePlaylistLikeBtn = (index: number) => {
   }
 };
 
+const resetFilteredSongsContainer = () => {
+  filteredSongsContainer.innerHTML = "";
+  filteredSongsContainer.style.display = "none";
+};
+
+const toggleFavorite = () => {
+  localStoragePlaylist = JSON.parse(localStorage.getItem("data") as string);
+  let index;
+  if (!audioPlayer.src) {
+    index = 0;
+  } else {
+    index = Number(audioPlayer.src.split("").slice(-5, -4).join("")) - 1;
+  }
+  if (localStoragePlaylist[index].isFavorite === false) {
+    localStoragePlaylist[index].isFavorite = true;
+  } else {
+    localStoragePlaylist[index].isFavorite = false;
+  }
+  localStorage.setItem("data", JSON.stringify(localStoragePlaylist));
+  playlist.forEach((i, index) => updatePlaylistLikeBtn(index));
+  updateFooterLikeBtn();
+};
+
+// functions - play/shuffle
 const togglePlay = (index: number) => {
   searchbar.value = "";
   if (searchbar?.classList.contains("showSearchbar")) toggleSearchbar();
@@ -144,82 +212,8 @@ const togglePlay = (index: number) => {
   updateAlbumImg(index);
   playlist.forEach((song, index) => updatePlaylistLikeBtn(index));
   updateFooterLikeBtn();
+  console.log(localStoragePlaylist);
 };
-
-const toggleSearchbar = () => {
-  if (
-    !searchbar?.classList.contains("showSearchbar") &&
-    !searchbar?.classList.contains("hideSearchbar")
-  ) {
-    searchbar?.classList.add("showSearchbar");
-  } else {
-    searchbar?.classList.toggle("showSearchbar");
-    searchbar?.classList.toggle("hideSearchbar");
-  }
-};
-
-const resetFilteredSongsContainer = () => {
-  filteredSongsContainer.innerHTML = "";
-  filteredSongsContainer.style.display = "none";
-};
-
-const searchSong = () => {
-  resetFilteredSongsContainer();
-  const searchStr = searchbar.value.toLowerCase();
-  if (searchStr.length) {
-    const filteredSongs = playlist.filter(
-      (song) =>
-        song.title.toLowerCase().includes(searchStr) ||
-        song.artist.toLowerCase().includes(searchStr)
-    );
-    filteredSongsContainer &&
-      filteredSongs.forEach(
-        (song) =>
-          (filteredSongsContainer.innerHTML += `<p class="filteredSong" id="filteredSong-${
-            song.number
-          }" onclick="togglePlay(${song.number - 1})">${song.title} by ${
-            song.artist
-          }</p>`)
-      );
-    if (filteredSongs.length) filteredSongsContainer.style.display = "block";
-  }
-};
-
-const handleKeydown = (e: KeyboardEvent) => {
-  if (e.key === "Enter" && searchbar.value) {
-    searchSong();
-  } else if (e.key === "Enter" && !searchbar.value) {
-    alert("Please enter title/ artist to search!");
-  }
-};
-
-// Favourits fa-heart
-const toggleFavorite = () => {
-  localStoragePlaylist = JSON.parse(localStorage.getItem("data") as string);
-  let index;
-  if (!audioPlayer.src) {
-    index = 0;
-  } else {
-    index = Number(audioPlayer.src.split("").slice(-5, -4).join("")) - 1;
-  }
-  if (localStoragePlaylist[index].isFavorite === false) {
-    localStoragePlaylist[index].isFavorite = true;
-  } else {
-    localStoragePlaylist[index].isFavorite = false;
-  }
-  localStorage.setItem("data", JSON.stringify(localStoragePlaylist));
-  playlist.forEach((i, index) => updatePlaylistLikeBtn(index));
-  updateFooterLikeBtn()
-};
-
-document.addEventListener("DOMContentLoaded", () => {
-  const heartIcons = document.querySelectorAll(".fa-heart");
-
-  heartIcons.forEach((heartIcon) => {
-    heartIcon.addEventListener("click", toggleFavorite);
-  });
-});
-// end favourits
 
 const playPreviousSong = async () => {
   audioPlayer.pause();
@@ -291,12 +285,16 @@ const updateTime = () => {
 };
 
 const updateFooterLikeBtn = () => {
-  let currentSongIndex = Number(audioPlayer.src.split("").slice(-5, -4).join("")) - 1;
+  let currentSongIndex =
+    Number(audioPlayer.src.split("").slice(-5, -4).join("")) - 1;
   console.log("update footer like", currentSongIndex);
   localStoragePlaylist = JSON.parse(
     localStorage.getItem("data") as string
   ) as Array<object>;
-  if (localStoragePlaylist && localStoragePlaylist[currentSongIndex].isFavorite) {
+  if (
+    localStoragePlaylist &&
+    localStoragePlaylist[currentSongIndex].isFavorite
+  ) {
     footerLikeBtn.style.color = "red";
   } else {
     footerLikeBtn.style.color = "white";
@@ -310,6 +308,13 @@ const handleMenuBtnKlick = () => {
 
 // call the funktions
 document.addEventListener("DOMContentLoaded", () => renderPlaylist());
+// document.addEventListener("DOMContentLoaded", () => {
+//   const heartIcons = document.querySelectorAll(".fa-heart");
+
+//   heartIcons.forEach((heartIcon) => {
+//     heartIcon.addEventListener("click", toggleFavorite);
+//   });
+// });
 document.addEventListener("click", resetFilteredSongsContainer);
 menuBtn?.addEventListener("click", handleMenuBtnKlick);
 searchBtn?.addEventListener("click", toggleSearchbar);
@@ -321,3 +326,4 @@ nextBtn?.addEventListener("click", playNextSong);
 shuffleBtn?.addEventListener("click", shuffle);
 audioPlayer?.addEventListener("timeupdate", updateTime);
 progressBar?.addEventListener("input", setCurrentTime);
+footerLikeBtn?.addEventListener("click", toggleFavorite)
