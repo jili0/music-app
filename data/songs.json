@@ -3,36 +3,42 @@
       "number": 1,
       "title": "Home",
       "artist": "Jordan Schor & Harley Bird",
-      "length": "3:36"
+      "length": "3:36",
+      "isFavorite": false
     },
     {
       "number": 2,
       "title": "Here I Am",
       "artist": "One Point Zero",
-      "length": "3:05"    
+      "length": "3:05"    ,
+      "isFavorite": false
     },
     {
       "number": 3,
       "title": "Crazy",
       "artist": "BEAUZ & JVNA",
-      "length": "3:08"
+      "length": "3:08",
+      "isFavorite": false
     },
     {
       "number": 4,
       "title": "Want Me",
       "artist": "Jimmy Hardwind & Mike Archangelo",
-      "length": "3:48"
+      "length": "3:48",
+      "isFavorite": false
     },
     {
       "number": 5,
       "title": "Sun Goes Down",
       "artist": "Jim Yosef & ROY KNOX",
-      "length": "2:48"
+      "length": "2:48",
+      "isFavorite": false
     },
     {
       "number": 6,
       "title": "Vision",
       "artist": "Lost Sky",
-      "length": "3:54"
+      "length": "3:54",
+      "isFavorite": false
     }
   ]
