@@ -140,6 +140,49 @@ const handleKeydown = (e) => {
         alert("Please enter title/ artist to search!");
     }
 };
+const resetFilteredSongsContainer = () => {
+    filteredSongsContainer.innerHTML = "";
+    filteredSongsContainer.style.display = "none";
+};
+const searchSong = () => {
+    resetFilteredSongsContainer();
+    const searchStr = searchbar.value.toLowerCase();
+    if (searchStr.length) {
+        const filteredSongs = playlist.filter((song) => song.title.toLowerCase().includes(searchStr) ||
+            song.artist.toLowerCase().includes(searchStr));
+        filteredSongsContainer &&
+            filteredSongs.forEach((song) => (filteredSongsContainer.innerHTML += `<p class="filteredSong" id="filteredSong-${song.number}" onclick="togglePlay(${song.number - 1})">${song.title} by ${song.artist}</p>`));
+        if (filteredSongs.length)
+            filteredSongsContainer.style.display = "block";
+    }
+};
+const handleKeydown = (e) => {
+    if (e.key === "Enter" && searchbar.value) {
+        searchSong();
+    }
+    else if (e.key === "Enter" && !searchbar.value) {
+        alert("Please enter title/ artist to search!");
+    }
+};
+// Favourits fa-heart
+const toggleFavorite = (event) => {
+    const heartIcon = event.target;
+    if (heartIcon.classList.contains("favorite")) {
+        heartIcon.classList.remove("favorite");
+        heartIcon.style.color = "white";
+    }
+    else {
+        heartIcon.classList.add("favorite");
+        heartIcon.style.color = "rgb(80, 71, 143)";
+    }
+};
+document.addEventListener("DOMContentLoaded", () => {
+    const heartIcons = document.querySelectorAll(".fa-heart");
+    heartIcons.forEach((heartIcon) => {
+        heartIcon.addEventListener("click", toggleFavorite);
+    });
+});
+// end favourits
 const playPreviousSong = () => __awaiter(void 0, void 0, void 0, function* () {
     audioPlayer.pause();
     isPlaying = false;
