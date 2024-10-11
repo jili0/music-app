@@ -65,6 +65,10 @@ header {
   gap: 1rem;
 }
 
+header > i {
+  text-shadow: 0px 0px 20px black;
+}
+
 .searchbar {
   border-radius: 4px;
   border: none;
