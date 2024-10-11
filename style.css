@@ -159,8 +159,8 @@ header {
   left: 0;
   width: 100%;
   height: 50%;
-  background-size: cover;
-  background-position: center;
+  object-fit: cover;
+  object-position: center;
   border-radius: 10px 10px 0;
 }
 
