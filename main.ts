@@ -107,6 +107,8 @@ const searchSong = () => {
 const renderPlaylist = async (
   shouldShuffle: boolean = false
 ): Promise<void> => {
+  console.log("renderPlaylist")
+  console.log(currentSongIndex)
   playlist = await fetchData();
   if (shouldShuffle) {
     playlist = playlist.sort((a, b) => 0.5 - Math.random());
@@ -246,6 +248,7 @@ const playNextSong = async () => {
 const playPlaylist = (num: number) => {
   if (currentSongIndex !== num) updateAudioPlayerSrc(num);
   togglePlay();
+  renderPlaylist()
 };
 
 const shuffle = async () => {
