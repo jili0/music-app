@@ -53,7 +53,6 @@ let localStoragePlaylist: Song[] =
   JSON.parse(localStorage.getItem("data") as string) || [];
 let playlistCurrentSong: HTMLParagraphElement | null;
 let playlistCurrentSongLikeBtn: HTMLElement | null;
-let isPlaying: boolean = false;
 let isShuffling: boolean = false;
 let isRepeating: boolean = false;
 let currentSongIndex: number =
@@ -72,19 +71,6 @@ const fetchData = async (): Promise<Song[]> => {
     return [];
   }
 };
-
-// const postData = async (): Promise<void> => {
-//   try {
-//     const data = JSON.stringify(localStorage.getItem("data"));
-//     const response = await fetch("./data/songs.json", {
-//       method: "POST",
-//       body: data,
-//     });
-//     console.log(response);
-//   } catch (err) {
-//     console.log(err);
-//   }
-// };
 
 // functions - for searchbar
 const toggleSearchbar = () => {
@@ -111,33 +97,44 @@ const searchSong = () => {
     filteredSongsContainer &&
       filteredSongs.forEach(
         (song) =>
-          (filteredSongsContainer.innerHTML += `<p class="filteredSong" id="filteredSong-${song.number}" onclick="togglePlay(${song.number})">${song.title} by ${song.artist}</p>`)
+          (filteredSongsContainer.innerHTML += `<p class="filteredSong" id="filteredSong-${song.number}" onclick="playPlaylist(${song.number})">${song.title} by ${song.artist}</p>`)
       );
     if (filteredSongs.length) filteredSongsContainer.style.display = "block";
   }
 };
 
-// functions - render/update Display
-const renderPlaylist = async (): Promise<void> => {
+// functions - render/update 
+const renderPlaylist = async (
+  shouldShuffle: boolean = false
+): Promise<void> => {
   playlist = await fetchData();
-  if (playlistContainer) {
-    const playlistHTML = playlist
-      .map((song) => {
-        const src = `/music/music-${song.number}.mp3`;
-        playlistContainer.innerHTML += `
-        <div class="playlistItem" data-audio="./music/music-${
+  if (shouldShuffle) {
+    playlist = playlist.sort((a, b) => 0.5 - Math.random());
+  }
+  playlistContainer.innerHTML = playlist
+    .map((song) => {
+      const src = `/music/music-${song.number}.mp3`;
+      return `
+        <div id="${
           song.number
-        }.mp3" data-title="${song.title}" data-artist="${
-          song.artist
-        }" onclick="togglePlay(${song.number})">
+        }" class="playlistItem" data-audio="./music/music-${
+        song.number
+      }.mp3" data-title="${song.title}" data-artist="${
+        song.artist
+      }" onclick="playPlaylist(${song.number})">
+
           <p class="number" id="playlistItem-${song.number}">${
-          currentSongIndex === song.number && !audioPlayer.paused
-            ? "<i class='fa fa-pause'></i>"
-            : song.number + 1
-        }</p>
+        currentSongIndex === song.number && !audioPlayer.paused
+          ? "<i class='fa fa-pause'></i>"
+          : song.number + 1
+      }</p>
+
           <p class="title">${song.title}</p>
+
           <p class="artist">${song.artist}</p>
+
           <p class="length">${song.length}</p>
+
           <svg
           class="playlistItemLikeBtn"
           id="playlistItemLikeBtn-${song.number}"
@@ -150,21 +147,25 @@ const renderPlaylist = async (): Promise<void> => {
               d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Zm0-108q96-86 158-147.5t98-107q36-45.5 50-81t14-70.5q0-60-40-100t-100-40q-47 0-87 26.5T518-680h-76q-15-41-55-67.5T300-774q-60 0-100 40t-40 100q0 35 14 70.5t50 81q36 45.5 98 107T480-228Zm0-273Z"
             />
           </svg>
+
         </div>
         `;
-      })
-      .join("");
-  }
+    })
+    .join("");
 };
 
 const renderCurrentSongInfo = () => {
   // update album image
   coverImg.src = `./images/music-${currentSongIndex}.jpg`;
   // update song title & artist
-  currentTitle.textContent = playlist[currentSongIndex].title;
-  currentArtist.textContent = playlist[currentSongIndex].artist;
+  currentTitle.textContent = playlist.filter(
+    (song) => song.number === currentSongIndex
+  )[0].title;
+  currentArtist.textContent = playlist.filter(
+    (song) => song.number === currentSongIndex
+  )[0].artist;
   // update play btn
-  isPlaying
+  !audioPlayer.paused
     ? (playBtn.innerHTML = `<path d="M360-320h80v-320h-80v320Zm160 0h80v-320h-80v320ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/>`)
     : (playBtn.innerHTML = `<path
     id="playBtnPath"
@@ -189,83 +190,75 @@ const resetFilteredSongsContainer = () => {
   filteredSongsContainer.style.display = "none";
 };
 
-// functions - play/shuffle
-const togglePlay = (index: number) => {
-  playBtn.innerHTML = `<path d="M360-320h80v-320h-80v320Zm160 0h80v-320h-80v320ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/>`;
+const updateAudioPlayerSrc = (num: number = currentSongIndex) => {
+  audioPlayer.pause();
+  audioPlayer.src =
+    audioPlayer.src.slice(0, -5) + num + audioPlayer.src.slice(-4);
+  currentSongIndex = num;
+};
 
+// functions - play/shuffle
+const togglePlay = () => {
   setTimeout(
     () =>
-      searchbar.classList.contains("showSearchbar") && !searchbar.classList.contains("hideSearchbar") ? toggleSearchbar() : null,
+      searchbar.classList.contains("showSearchbar") &&
+      !searchbar.classList.contains("hideSearchbar")
+        ? toggleSearchbar()
+        : null,
     1500
   );
-  const prevSrc = audioPlayer.src;
-  const { number, title, artist } = playlist[index];
-  audioPlayer.src = `./music/music-${number}.mp3`;
-  currentSongIndex =
-    Number(audioPlayer.src.split("").slice(-5, -4).join("")) || 0;
-  if (isPlaying && prevSrc === audioPlayer.src) {
-    audioPlayer.pause();
-    isPlaying = false;
-    renderPlaylist();
-    playBtn.innerHTML = `<path
-            id="playBtnPath"
-            d="M320-200v-560l440 280-440 280Zm80-280Zm0 134 210-134-210-134v268Z"
-          />`;
-  } else {
-    audioPlayer.play().catch((err) => {
-      console.error("Fehler beim Abspielen der Musik:", err);
-    });
-    isPlaying = true;
-    renderPlaylist();
-    renderCurrentSongInfo();
-  }
-  renderPlaylist();
+  !audioPlayer.paused ? audioPlayer.pause() : audioPlayer.play();
+  renderCurrentSongInfo();
 };
 
 const playPreviousSong = async () => {
   audioPlayer.pause();
-  isPlaying = false;
-  let index = Number(audioPlayer.src.split("").slice(-5, -4).join("")) - 1;
-  index < 0 ? (index += playlist.length) : null;
-  togglePlay(index);
+  let index: number = 0;
+  let nextIndex: number = 0;
+  playlist.forEach((song) =>
+    song.number !== currentSongIndex
+      ? index++
+      : index - 1 < 0
+      ? (nextIndex = index - 1 + playlist.length)
+      : (nextIndex = index - 1)
+  );
+  currentSongIndex = playlist[nextIndex].number;
+  updateAudioPlayerSrc();
+  togglePlay();
 };
 
 const playNextSong = async () => {
   audioPlayer.pause();
-  isPlaying = false;
-  let index = currentSongIndex + 1;
-  index >= playlist.length ? (index -= playlist.length) : null;
-  togglePlay(index);
+  let index: number = 0;
+  let nextIndex: number = 0;
+  playlist.forEach((song) =>
+    song.number !== currentSongIndex
+      ? index++
+      : index + 1 >= playlist.length
+      ? (nextIndex = index + 1 - playlist.length)
+      : (nextIndex = index + 1)
+  );
+  currentSongIndex = playlist[nextIndex].number;
+  updateAudioPlayerSrc();
+  togglePlay();
 };
 
-const play = () => {
-  currentSongIndex = !audioPlayer.src
-    ? 0
-    : Number(audioPlayer.src.split("").slice(-5, -4).join(""));
-
-  togglePlay(currentSongIndex);
+const playPlaylist = (num: number) => {
+  if (currentSongIndex !== num) updateAudioPlayerSrc(num);
+  togglePlay();
 };
 
-const shuffle = async (e: MouseEvent) => {
-  if (!isShuffling) {
-    (e.target as HTMLElement).style.fill = "slateblue";
-    const randomIndex = Math.floor(Math.random() * playlist?.length);
-    currentSongIndex = randomIndex;
-    audioPlayer.src = `./music/music-${currentSongIndex}.mp3`;
-    audioPlayer.play();
-    audioPlayer.autoplay = true;
-    isPlaying = true;
-    isShuffling = true;
-    // updatePlayBtnIcon();
-    // currentTitle.textContent = playlist[randomIndex].title;
-    // currentArtist.textContent = playlist[randomIndex].artist;
+const shuffle = async () => {
+  isShuffling = !isShuffling;
+  if (isShuffling) {
+    await renderPlaylist(true);
+    shuffleBtn.style.fill = "slateblue";
+    updateAudioPlayerSrc(Number(playlist[0].number));
+    togglePlay();
   } else {
-    (e.target as HTMLElement).style.fill = "white";
-    audioPlayer.pause();
-    audioPlayer.autoplay = false;
-    isPlaying = false;
-    isShuffling = false;
-    // updatePlayBtnIcon();
+    renderPlaylist(false);
+    shuffleBtn.style.fill = "white";
+    togglePlay();
   }
 };
 
@@ -273,12 +266,12 @@ const toggleRepeat = () => {
   if (!isRepeating) {
     audioPlayer.loop = true;
     repeatOneBtn.style.fill = "slateblue";
+    audioPlayer.paused && togglePlay()
   } else {
     audioPlayer.loop = false;
     repeatOneBtn.style.fill = "white";
   }
   isRepeating = !isRepeating;
-  audioPlayer.paused && play();
 };
 
 // functions - others
@@ -320,10 +313,11 @@ searchBtn?.addEventListener("click", toggleSearchbar);
 searchbar?.addEventListener("input", searchSong);
 searchbar?.addEventListener("focus", resetFilteredSongsContainer);
 
-playBtn?.addEventListener("click", play);
+playBtn?.addEventListener("click", togglePlay);
 prevBtn?.addEventListener("click", playPreviousSong);
 nextBtn?.addEventListener("click", playNextSong);
 audioPlayer?.addEventListener("timeupdate", updateTime);
+audioPlayer.addEventListener("ended", playNextSong);
 progressBar?.addEventListener("input", setCurrentTime);
 
 likeBtn?.addEventListener("click", toggleFavorite);
