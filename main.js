@@ -80,6 +80,8 @@ const searchSong = () => {
 };
 // functions - render/update 
 const renderPlaylist = (...args_1) => __awaiter(void 0, [...args_1], void 0, function* (shouldShuffle = false) {
+    console.log("renderPlaylist");
+    console.log(currentSongIndex);
     playlist = yield fetchData();
     if (shouldShuffle) {
         playlist = playlist.sort((a, b) => 0.5 - Math.random());
@@ -192,6 +194,7 @@ const playPlaylist = (num) => {
     if (currentSongIndex !== num)
         updateAudioPlayerSrc(num);
     togglePlay();
+    renderPlaylist();
 };
 const shuffle = () => __awaiter(void 0, void 0, void 0, function* () {
     isShuffling = !isShuffling;
