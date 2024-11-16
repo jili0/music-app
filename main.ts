@@ -179,6 +179,7 @@ const renderCurrentSongInfo = async () => {
 };
 
 const toggleFavorite = async (num: number) => {
+  event?.stopPropagation();
   playlist =
     JSON.parse(localStorage.getItem("data") as string) || (await fetchData());
   playlist = playlist.map((song) =>

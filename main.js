@@ -139,6 +139,7 @@ const renderCurrentSongInfo = () => __awaiter(void 0, void 0, void 0, function* 
         : (likeBtn.style.fill = "white");
 });
 const toggleFavorite = (num) => __awaiter(void 0, void 0, void 0, function* () {
+    event === null || event === void 0 ? void 0 : event.stopPropagation();
     playlist =
         JSON.parse(localStorage.getItem("data")) || (yield fetchData());
     playlist = playlist.map((song) => song.number === num ? Object.assign(Object.assign({}, song), { isFavorite: !song.isFavorite }) : song);
