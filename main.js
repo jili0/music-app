@@ -36,12 +36,21 @@ const likeBtn = document.getElementById("like");
 const shuffleBtn = document.getElementById("shuffle");
 const repeatOneBtn = document.getElementById("repeatOne");
 const settingsBtn = document.getElementById("settings");
+// sleep timer
+const sleepTimer = document.getElementById("sleepTimer");
+const timerInput = document.getElementById("timerInput");
+const timerBtn = document.getElementById("timerBtn");
+const countDown = document.getElementById("countDown");
+const minutes = document.getElementById("minutes");
+const seconds = document.getElementById("seconds");
+const letterS = document.getElementById("letterS");
 let playlist = JSON.parse(localStorage.getItem("data")) || [];
 let playlistCurrentSong;
 let playlistCurrentSongLikeBtn;
 let isShuffling = false;
 let isRepeating = false;
 let currentSongIndex = Number(audioPlayer.src.split("").slice(-5, -4).join("")) || 0;
+let timer = 0;
 // FUNCTIONS
 const fetchData = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -250,19 +259,51 @@ const startMusicApp = () => __awaiter(void 0, void 0, void 0, function* () {
     yield renderPlaylist();
     renderCurrentSongInfo();
 });
+const toggleSleepTimer = () => {
+    sleepTimer.style.display =
+        sleepTimer.style.display === "block" ? "none" : "block";
+};
+const setSleepTimer = () => __awaiter(void 0, void 0, void 0, function* () {
+    const timeout = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+    const timerInputValue = Number(timerInput.value);
+    timer = timerInputValue * 1000 * 60;
+    if (timer === 60000) {
+        letterS.style.display = "none";
+    }
+    settingsBtn.style.fill = timer ? "slateblue" : "white";
+    while (timer > 0) {
+        timer -= 1000;
+        const minutesStr = Math.floor(timer / 60000).toString();
+        const secondsStr = ((timer / 1000) % 60).toString();
+        minutes.textContent =
+            minutesStr.length === 1 ? "0" + minutesStr : minutesStr;
+        seconds.textContent =
+            secondsStr.length === 1 ? "0" + secondsStr : secondsStr;
+        yield timeout(1000);
+    }
+    if (timer === 0) {
+        audioPlayer.pause();
+        renderCurrentSongInfo();
+        settingsBtn.style.fill = "white";
+        minutes.textContent = "00";
+        seconds.textContent = "00";
+    }
+});
 // call the funktions
 document.addEventListener("DOMContentLoaded", startMusicApp);
 document.addEventListener("click", resetFilteredSongsContainer);
-menuBtn === null || menuBtn === void 0 ? void 0 : menuBtn.addEventListener("click", handleMenuBtnKlick);
-searchBtn === null || searchBtn === void 0 ? void 0 : searchBtn.addEventListener("click", toggleSearchbar);
-searchbar === null || searchbar === void 0 ? void 0 : searchbar.addEventListener("input", searchSong);
-searchbar === null || searchbar === void 0 ? void 0 : searchbar.addEventListener("focus", resetFilteredSongsContainer);
-playBtn === null || playBtn === void 0 ? void 0 : playBtn.addEventListener("click", togglePlay);
-prevBtn === null || prevBtn === void 0 ? void 0 : prevBtn.addEventListener("click", playPreviousSong);
-nextBtn === null || nextBtn === void 0 ? void 0 : nextBtn.addEventListener("click", playNextSong);
-audioPlayer === null || audioPlayer === void 0 ? void 0 : audioPlayer.addEventListener("timeupdate", updateTime);
+menuBtn.addEventListener("click", handleMenuBtnKlick);
+searchBtn.addEventListener("click", toggleSearchbar);
+searchbar.addEventListener("input", searchSong);
+searchbar.addEventListener("focus", resetFilteredSongsContainer);
+playBtn.addEventListener("click", togglePlay);
+prevBtn.addEventListener("click", playPreviousSong);
+nextBtn.addEventListener("click", playNextSong);
+audioPlayer.addEventListener("timeupdate", updateTime);
 audioPlayer.addEventListener("ended", playNextSong);
-progressBar === null || progressBar === void 0 ? void 0 : progressBar.addEventListener("input", setCurrentTime);
-likeBtn === null || likeBtn === void 0 ? void 0 : likeBtn.addEventListener("click", () => toggleFavorite(currentSongIndex));
-shuffleBtn === null || shuffleBtn === void 0 ? void 0 : shuffleBtn.addEventListener("click", shuffle);
+progressBar.addEventListener("input", setCurrentTime);
+likeBtn.addEventListener("click", () => toggleFavorite(currentSongIndex));
+shuffleBtn.addEventListener("click", shuffle);
 repeatOneBtn.addEventListener("click", toggleRepeat);
+settingsBtn.addEventListener("click", toggleSleepTimer);
+timerBtn.addEventListener("click", setSleepTimer);

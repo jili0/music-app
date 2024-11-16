@@ -364,6 +364,51 @@ footer {
   z-index: 10;
 }
 
+.sleepTimer {
+  display: none;
+  position: absolute;
+  top: -70vh;
+  left: 10%;
+  right: 10%;
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 1rem;
+  box-shadow: 0 0 25px rgba(200, 200, 200, 0.3);
+}
+
+.sleepTimer > div:first-of-type {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.sleepTimer input {
+  width: 2rem;
+}
+
+.sleepTimer button {
+  border: none;
+  padding: 2px 4px;
+  border-radius: 2px;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, .5);
+  background-color: slateblue;
+  color: white;
+}
+
+.sleepTimer button:hover {
+  opacity: .9;
+}
+
+.sleepTimer button:active {
+  opacity: .8;
+}
+
+.sleepTimer > div:last-of-type {
+  font-size: 2rem;
+  text-align: center;
+  margin-top: .5rem;
+}
+
 /* Media query */
 @media screen and (height < 14rem) {
   footer,
