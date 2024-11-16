@@ -79,7 +79,8 @@ const searchSong = () => {
 };
 // functions - render/update
 const renderPlaylist = (...args_1) => __awaiter(void 0, [...args_1], void 0, function* (shouldShuffle = false) {
-    playlist = JSON.parse(localStorage.getItem("data")) || (yield fetchData());
+    playlist =
+        JSON.parse(localStorage.getItem("data")) || (yield fetchData());
     if (shouldShuffle) {
         playlist = playlist.sort((a, b) => 0.5 - Math.random());
     }
@@ -118,7 +119,8 @@ const renderPlaylist = (...args_1) => __awaiter(void 0, [...args_1], void 0, fun
         .join("");
 });
 const renderCurrentSongInfo = () => __awaiter(void 0, void 0, void 0, function* () {
-    playlist = JSON.parse(localStorage.getItem("data")) || (yield fetchData());
+    playlist =
+        JSON.parse(localStorage.getItem("data")) || (yield fetchData());
     // update album image
     coverImg.src = `./images/music-${currentSongIndex}.jpg`;
     // update song title & artist
@@ -136,10 +138,10 @@ const renderCurrentSongInfo = () => __awaiter(void 0, void 0, void 0, function* 
         ? (likeBtn.style.fill = "red")
         : (likeBtn.style.fill = "white");
 });
-const toggleFavorite = () => __awaiter(void 0, void 0, void 0, function* () {
-    playlist = JSON.parse(localStorage.getItem("data")) || (yield fetchData());
-    playlist = playlist.map((song) => song.number === currentSongIndex
-        ? Object.assign(Object.assign({}, song), { isFavorite: !song.isFavorite }) : song);
+const toggleFavorite = (num) => __awaiter(void 0, void 0, void 0, function* () {
+    playlist =
+        JSON.parse(localStorage.getItem("data")) || (yield fetchData());
+    playlist = playlist.map((song) => song.number === num ? Object.assign(Object.assign({}, song), { isFavorite: !song.isFavorite }) : song);
     localStorage.setItem("data", JSON.stringify(playlist));
     renderPlaylist();
     renderCurrentSongInfo();
@@ -260,6 +262,6 @@ nextBtn === null || nextBtn === void 0 ? void 0 : nextBtn.addEventListener("clic
 audioPlayer === null || audioPlayer === void 0 ? void 0 : audioPlayer.addEventListener("timeupdate", updateTime);
 audioPlayer.addEventListener("ended", playNextSong);
 progressBar === null || progressBar === void 0 ? void 0 : progressBar.addEventListener("input", setCurrentTime);
-likeBtn === null || likeBtn === void 0 ? void 0 : likeBtn.addEventListener("click", toggleFavorite);
+likeBtn === null || likeBtn === void 0 ? void 0 : likeBtn.addEventListener("click", () => toggleFavorite(currentSongIndex));
 shuffleBtn === null || shuffleBtn === void 0 ? void 0 : shuffleBtn.addEventListener("click", shuffle);
 repeatOneBtn.addEventListener("click", toggleRepeat);

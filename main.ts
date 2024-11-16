@@ -48,8 +48,7 @@ interface Song {
   isFavorite: boolean;
 }
 
-let playlist: Song[] =
-  JSON.parse(localStorage.getItem("data") as string) || [];
+let playlist: Song[] = JSON.parse(localStorage.getItem("data") as string) || [];
 let playlistCurrentSong: HTMLParagraphElement | null;
 let playlistCurrentSongLikeBtn: HTMLElement | null;
 let isShuffling: boolean = false;
@@ -70,7 +69,6 @@ const fetchData = async (): Promise<Song[]> => {
     return [];
   }
 };
-
 
 // functions - for searchbar
 const toggleSearchbar = () => {
@@ -107,7 +105,8 @@ const searchSong = () => {
 const renderPlaylist = async (
   shouldShuffle: boolean = false
 ): Promise<void> => {
-  playlist = JSON.parse(localStorage.getItem("data") as string) || await fetchData();
+  playlist =
+    JSON.parse(localStorage.getItem("data") as string) || (await fetchData());
   if (shouldShuffle) {
     playlist = playlist.sort((a, b) => 0.5 - Math.random());
   }
@@ -155,7 +154,8 @@ const renderPlaylist = async (
 };
 
 const renderCurrentSongInfo = async () => {
-  playlist = JSON.parse(localStorage.getItem("data") as string) || await fetchData();
+  playlist =
+    JSON.parse(localStorage.getItem("data") as string) || (await fetchData());
   // update album image
   coverImg.src = `./images/music-${currentSongIndex}.jpg`;
   // update song title & artist
@@ -178,12 +178,11 @@ const renderCurrentSongInfo = async () => {
     : (likeBtn.style.fill = "white");
 };
 
-const toggleFavorite = async () => {
-  playlist = JSON.parse(localStorage.getItem("data") as string) || await fetchData();
+const toggleFavorite = async (num: number) => {
+  playlist =
+    JSON.parse(localStorage.getItem("data") as string) || (await fetchData());
   playlist = playlist.map((song) =>
-    song.number === currentSongIndex
-      ? { ...song, isFavorite: !song.isFavorite }
-      : song
+    song.number === num ? { ...song, isFavorite: !song.isFavorite } : song
   );
   localStorage.setItem("data", JSON.stringify(playlist));
   renderPlaylist();
@@ -249,7 +248,6 @@ const playNextSong = async () => {
 };
 
 const playPlaylist = (num: number) => {
-  console.log("playplaylist")
   if (currentSongIndex !== num) updateAudioPlayerSrc(num);
   togglePlay();
   renderPlaylist();
@@ -327,6 +325,6 @@ audioPlayer?.addEventListener("timeupdate", updateTime);
 audioPlayer.addEventListener("ended", playNextSong);
 progressBar?.addEventListener("input", setCurrentTime);
 
-likeBtn?.addEventListener("click", toggleFavorite);
+likeBtn?.addEventListener("click", () => toggleFavorite(currentSongIndex));
 shuffleBtn?.addEventListener("click", shuffle);
 repeatOneBtn.addEventListener("click", toggleRepeat);
