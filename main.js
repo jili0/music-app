@@ -36,8 +36,7 @@ const likeBtn = document.getElementById("like");
 const shuffleBtn = document.getElementById("shuffle");
 const repeatOneBtn = document.getElementById("repeatOne");
 const settingsBtn = document.getElementById("settings");
-let playlist;
-let localStoragePlaylist = JSON.parse(localStorage.getItem("data")) || [];
+let playlist = JSON.parse(localStorage.getItem("data")) || [];
 let playlistCurrentSong;
 let playlistCurrentSongLikeBtn;
 let isShuffling = false;
@@ -52,7 +51,7 @@ const fetchData = () => __awaiter(void 0, void 0, void 0, function* () {
         return jsonData;
     }
     catch (err) {
-        console.log(err);
+        console.error(err);
         return [];
     }
 });
@@ -78,11 +77,10 @@ const searchSong = () => {
             filteredSongsContainer.style.display = "block";
     }
 };
-// functions - render/update 
+// functions - render/update
 const renderPlaylist = (...args_1) => __awaiter(void 0, [...args_1], void 0, function* (shouldShuffle = false) {
-    console.log("renderPlaylist");
-    console.log(currentSongIndex);
-    playlist = yield fetchData();
+    playlist =
+        JSON.parse(localStorage.getItem("data")) || (yield fetchData());
     if (shouldShuffle) {
         playlist = playlist.sort((a, b) => 0.5 - Math.random());
     }
@@ -120,7 +118,9 @@ const renderPlaylist = (...args_1) => __awaiter(void 0, [...args_1], void 0, fun
     })
         .join("");
 });
-const renderCurrentSongInfo = () => {
+const renderCurrentSongInfo = () => __awaiter(void 0, void 0, void 0, function* () {
+    playlist =
+        JSON.parse(localStorage.getItem("data")) || (yield fetchData());
     // update album image
     coverImg.src = `./images/music-${currentSongIndex}.jpg`;
     // update song title & artist
@@ -134,17 +134,18 @@ const renderCurrentSongInfo = () => {
     d="M320-200v-560l440 280-440 280Zm80-280Zm0 134 210-134-210-134v268Z"
   />`);
     // update like btn
-    localStoragePlaylist[currentSongIndex].isFavorite
+    playlist.filter((song) => song.number === currentSongIndex)[0].isFavorite
         ? (likeBtn.style.fill = "red")
         : (likeBtn.style.fill = "white");
-};
-const toggleFavorite = () => {
-    localStoragePlaylist[currentSongIndex].isFavorite =
-        !localStoragePlaylist[currentSongIndex].isFavorite;
-    localStorage.setItem("data", JSON.stringify(localStoragePlaylist));
+});
+const toggleFavorite = (num) => __awaiter(void 0, void 0, void 0, function* () {
+    playlist =
+        JSON.parse(localStorage.getItem("data")) || (yield fetchData());
+    playlist = playlist.map((song) => song.number === num ? Object.assign(Object.assign({}, song), { isFavorite: !song.isFavorite }) : song);
+    localStorage.setItem("data", JSON.stringify(playlist));
     renderPlaylist();
     renderCurrentSongInfo();
-};
+});
 const resetFilteredSongsContainer = () => {
     filteredSongsContainer.innerHTML = "";
     filteredSongsContainer.style.display = "none";
@@ -261,6 +262,6 @@ nextBtn === null || nextBtn === void 0 ? void 0 : nextBtn.addEventListener("clic
 audioPlayer === null || audioPlayer === void 0 ? void 0 : audioPlayer.addEventListener("timeupdate", updateTime);
 audioPlayer.addEventListener("ended", playNextSong);
 progressBar === null || progressBar === void 0 ? void 0 : progressBar.addEventListener("input", setCurrentTime);
-likeBtn === null || likeBtn === void 0 ? void 0 : likeBtn.addEventListener("click", toggleFavorite);
+likeBtn === null || likeBtn === void 0 ? void 0 : likeBtn.addEventListener("click", () => toggleFavorite(currentSongIndex));
 shuffleBtn === null || shuffleBtn === void 0 ? void 0 : shuffleBtn.addEventListener("click", shuffle);
 repeatOneBtn.addEventListener("click", toggleRepeat);

@@ -48,9 +48,7 @@ interface Song {
   isFavorite: boolean;
 }
 
-let playlist: Song[];
-let localStoragePlaylist: Song[] =
-  JSON.parse(localStorage.getItem("data") as string) || [];
+let playlist: Song[] = JSON.parse(localStorage.getItem("data") as string) || [];
 let playlistCurrentSong: HTMLParagraphElement | null;
 let playlistCurrentSongLikeBtn: HTMLElement | null;
 let isShuffling: boolean = false;
@@ -67,7 +65,7 @@ const fetchData = async (): Promise<Song[]> => {
     localStorage.setItem("data", JSON.stringify(jsonData));
     return jsonData;
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return [];
   }
 };
@@ -103,13 +101,12 @@ const searchSong = () => {
   }
 };
 
-// functions - render/update 
+// functions - render/update
 const renderPlaylist = async (
   shouldShuffle: boolean = false
 ): Promise<void> => {
-  console.log("renderPlaylist")
-  console.log(currentSongIndex)
-  playlist = await fetchData();
+  playlist =
+    JSON.parse(localStorage.getItem("data") as string) || (await fetchData());
   if (shouldShuffle) {
     playlist = playlist.sort((a, b) => 0.5 - Math.random());
   }
@@ -156,7 +153,9 @@ const renderPlaylist = async (
     .join("");
 };
 
-const renderCurrentSongInfo = () => {
+const renderCurrentSongInfo = async () => {
+  playlist =
+    JSON.parse(localStorage.getItem("data") as string) || (await fetchData());
   // update album image
   coverImg.src = `./images/music-${currentSongIndex}.jpg`;
   // update song title & artist
@@ -174,15 +173,18 @@ const renderCurrentSongInfo = () => {
     d="M320-200v-560l440 280-440 280Zm80-280Zm0 134 210-134-210-134v268Z"
   />`);
   // update like btn
-  localStoragePlaylist[currentSongIndex].isFavorite
+  playlist.filter((song) => song.number === currentSongIndex)[0].isFavorite
     ? (likeBtn.style.fill = "red")
     : (likeBtn.style.fill = "white");
 };
 
-const toggleFavorite = () => {
-  localStoragePlaylist[currentSongIndex].isFavorite =
-    !localStoragePlaylist[currentSongIndex].isFavorite;
-  localStorage.setItem("data", JSON.stringify(localStoragePlaylist));
+const toggleFavorite = async (num: number) => {
+  playlist =
+    JSON.parse(localStorage.getItem("data") as string) || (await fetchData());
+  playlist = playlist.map((song) =>
+    song.number === num ? { ...song, isFavorite: !song.isFavorite } : song
+  );
+  localStorage.setItem("data", JSON.stringify(playlist));
   renderPlaylist();
   renderCurrentSongInfo();
 };
@@ -248,7 +250,7 @@ const playNextSong = async () => {
 const playPlaylist = (num: number) => {
   if (currentSongIndex !== num) updateAudioPlayerSrc(num);
   togglePlay();
-  renderPlaylist()
+  renderPlaylist();
 };
 
 const shuffle = async () => {
@@ -269,7 +271,7 @@ const toggleRepeat = () => {
   if (!isRepeating) {
     audioPlayer.loop = true;
     repeatOneBtn.style.fill = "slateblue";
-    audioPlayer.paused && togglePlay()
+    audioPlayer.paused && togglePlay();
   } else {
     audioPlayer.loop = false;
     repeatOneBtn.style.fill = "white";
@@ -323,6 +325,6 @@ audioPlayer?.addEventListener("timeupdate", updateTime);
 audioPlayer.addEventListener("ended", playNextSong);
 progressBar?.addEventListener("input", setCurrentTime);
 
-likeBtn?.addEventListener("click", toggleFavorite);
+likeBtn?.addEventListener("click", () => toggleFavorite(currentSongIndex));
 shuffleBtn?.addEventListener("click", shuffle);
 repeatOneBtn.addEventListener("click", toggleRepeat);
