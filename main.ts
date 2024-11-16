@@ -261,7 +261,7 @@ const playPlaylist = (num: number) => {
   renderPlaylist();
 };
 
-const shuffle = async () => {
+const toggleShuffle = async () => {
   isShuffling = !isShuffling;
 
   if (isShuffling) {
@@ -373,7 +373,7 @@ audioPlayer.addEventListener("ended", playNextSong);
 progressBar.addEventListener("input", setCurrentTime);
 
 likeBtn.addEventListener("click", () => toggleFavorite(currentSongIndex));
-shuffleBtn.addEventListener("click", shuffle);
+shuffleBtn.addEventListener("click", toggleShuffle);
 repeatOneBtn.addEventListener("click", toggleRepeat);
 settingsBtn.addEventListener("click", toggleSleepTimer);
 timerBtn.addEventListener("click", setSleepTimer);

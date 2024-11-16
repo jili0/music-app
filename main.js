@@ -206,7 +206,7 @@ const playPlaylist = (num) => {
     togglePlay();
     renderPlaylist();
 };
-const shuffle = () => __awaiter(void 0, void 0, void 0, function* () {
+const toggleShuffle = () => __awaiter(void 0, void 0, void 0, function* () {
     isShuffling = !isShuffling;
     if (isShuffling) {
         playlist = playlist.sort((a, b) => 0.5 - Math.random());
@@ -306,7 +306,7 @@ audioPlayer.addEventListener("timeupdate", updateTime);
 audioPlayer.addEventListener("ended", playNextSong);
 progressBar.addEventListener("input", setCurrentTime);
 likeBtn.addEventListener("click", () => toggleFavorite(currentSongIndex));
-shuffleBtn.addEventListener("click", shuffle);
+shuffleBtn.addEventListener("click", toggleShuffle);
 repeatOneBtn.addEventListener("click", toggleRepeat);
 settingsBtn.addEventListener("click", toggleSleepTimer);
 timerBtn.addEventListener("click", setSleepTimer);
