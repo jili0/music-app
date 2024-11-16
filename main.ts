@@ -112,14 +112,9 @@ const searchSong = () => {
 };
 
 // functions - render/update
-const renderPlaylist = async (
-  shouldShuffle: boolean = false
-): Promise<void> => {
+const renderPlaylist = async (): Promise<void> => {
   playlist =
     JSON.parse(localStorage.getItem("data") as string) || (await fetchData());
-  if (shouldShuffle) {
-    playlist = playlist.sort((a, b) => 0.5 - Math.random());
-  }
   playlistContainer.innerHTML = playlist
     .map((song) => {
       const src = `/music/music-${song.number}.mp3`;
@@ -224,6 +219,7 @@ const togglePlay = () => {
   );
   !audioPlayer.paused ? audioPlayer.pause() : audioPlayer.play();
   renderCurrentSongInfo();
+  renderPlaylist();
 };
 
 const playPreviousSong = async () => {
@@ -240,6 +236,7 @@ const playPreviousSong = async () => {
   currentSongIndex = playlist[nextIndex].number;
   updateAudioPlayerSrc();
   togglePlay();
+  renderPlaylist();
 };
 
 const playNextSong = async () => {
@@ -266,13 +263,18 @@ const playPlaylist = (num: number) => {
 
 const shuffle = async () => {
   isShuffling = !isShuffling;
+
   if (isShuffling) {
-    await renderPlaylist(true);
+    playlist = playlist.sort((a, b) => 0.5 - Math.random());
+    localStorage.setItem("data", JSON.stringify(playlist));
+    await renderPlaylist();
     shuffleBtn.style.fill = "slateblue";
     updateAudioPlayerSrc(Number(playlist[0].number));
     togglePlay();
   } else {
-    renderPlaylist(false);
+    playlist = playlist.sort((a, b) => a.number - b.number);
+    localStorage.setItem("data", JSON.stringify(playlist));
+    renderPlaylist();
     shuffleBtn.style.fill = "white";
     togglePlay();
   }
