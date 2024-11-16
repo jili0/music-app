@@ -48,8 +48,7 @@ interface Song {
   isFavorite: boolean;
 }
 
-let playlist: Song[];
-let localStoragePlaylist: Song[] =
+let playlist: Song[] =
   JSON.parse(localStorage.getItem("data") as string) || [];
 let playlistCurrentSong: HTMLParagraphElement | null;
 let playlistCurrentSongLikeBtn: HTMLElement | null;
@@ -67,10 +66,11 @@ const fetchData = async (): Promise<Song[]> => {
     localStorage.setItem("data", JSON.stringify(jsonData));
     return jsonData;
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return [];
   }
 };
+
 
 // functions - for searchbar
 const toggleSearchbar = () => {
@@ -103,13 +103,11 @@ const searchSong = () => {
   }
 };
 
-// functions - render/update 
+// functions - render/update
 const renderPlaylist = async (
   shouldShuffle: boolean = false
 ): Promise<void> => {
-  console.log("renderPlaylist")
-  console.log(currentSongIndex)
-  playlist = await fetchData();
+  playlist = JSON.parse(localStorage.getItem("data") as string) || await fetchData();
   if (shouldShuffle) {
     playlist = playlist.sort((a, b) => 0.5 - Math.random());
   }
@@ -145,7 +143,7 @@ const renderPlaylist = async (
           viewBox="0 -960 960 960"
           >
             <path
-              fill=${song.isFavorite ? "red" : "white"}
+              fill=${song.isFavorite ? "red" : "blue"}
               d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Zm0-108q96-86 158-147.5t98-107q36-45.5 50-81t14-70.5q0-60-40-100t-100-40q-47 0-87 26.5T518-680h-76q-15-41-55-67.5T300-774q-60 0-100 40t-40 100q0 35 14 70.5t50 81q36 45.5 98 107T480-228Zm0-273Z"
             />
           </svg>
@@ -156,7 +154,8 @@ const renderPlaylist = async (
     .join("");
 };
 
-const renderCurrentSongInfo = () => {
+const renderCurrentSongInfo = async () => {
+  playlist = JSON.parse(localStorage.getItem("data") as string) || await fetchData();
   // update album image
   coverImg.src = `./images/music-${currentSongIndex}.jpg`;
   // update song title & artist
@@ -174,15 +173,19 @@ const renderCurrentSongInfo = () => {
     d="M320-200v-560l440 280-440 280Zm80-280Zm0 134 210-134-210-134v268Z"
   />`);
   // update like btn
-  localStoragePlaylist[currentSongIndex].isFavorite
+  playlist.filter((song) => song.number === currentSongIndex)[0].isFavorite
     ? (likeBtn.style.fill = "red")
     : (likeBtn.style.fill = "white");
 };
 
-const toggleFavorite = () => {
-  localStoragePlaylist[currentSongIndex].isFavorite =
-    !localStoragePlaylist[currentSongIndex].isFavorite;
-  localStorage.setItem("data", JSON.stringify(localStoragePlaylist));
+const toggleFavorite = async () => {
+  playlist = JSON.parse(localStorage.getItem("data") as string) || await fetchData();
+  playlist = playlist.map((song) =>
+    song.number === currentSongIndex
+      ? { ...song, isFavorite: !song.isFavorite }
+      : song
+  );
+  localStorage.setItem("data", JSON.stringify(playlist));
   renderPlaylist();
   renderCurrentSongInfo();
 };
@@ -248,7 +251,7 @@ const playNextSong = async () => {
 const playPlaylist = (num: number) => {
   if (currentSongIndex !== num) updateAudioPlayerSrc(num);
   togglePlay();
-  renderPlaylist()
+  renderPlaylist();
 };
 
 const shuffle = async () => {
@@ -269,7 +272,7 @@ const toggleRepeat = () => {
   if (!isRepeating) {
     audioPlayer.loop = true;
     repeatOneBtn.style.fill = "slateblue";
-    audioPlayer.paused && togglePlay()
+    audioPlayer.paused && togglePlay();
   } else {
     audioPlayer.loop = false;
     repeatOneBtn.style.fill = "white";
