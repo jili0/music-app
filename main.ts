@@ -39,6 +39,15 @@ const shuffleBtn = document.getElementById("shuffle") as HTMLElement;
 const repeatOneBtn = document.getElementById("repeatOne") as HTMLElement;
 const settingsBtn = document.getElementById("settings") as HTMLElement;
 
+// sleep timer
+const sleepTimer = document.getElementById("sleepTimer") as HTMLElement;
+const timerInput = document.getElementById("timerInput") as HTMLInputElement;
+const timerBtn = document.getElementById("timerBtn") as HTMLElement;
+const countDown = document.getElementById("countDown") as HTMLElement;
+const minutes = document.getElementById("minutes") as HTMLSpanElement;
+const seconds = document.getElementById("seconds") as HTMLSpanElement;
+const letterS = document.getElementById("letterS") as HTMLSpanElement;
+
 // global variables
 interface Song {
   number: number;
@@ -55,6 +64,7 @@ let isShuffling: boolean = false;
 let isRepeating: boolean = false;
 let currentSongIndex: number =
   Number(audioPlayer.src.split("").slice(-5, -4).join("")) || 0;
+let timer: number = 0;
 
 // FUNCTIONS
 
@@ -179,6 +189,7 @@ const renderCurrentSongInfo = async () => {
 };
 
 const toggleFavorite = async (num: number) => {
+  event?.stopPropagation();
   playlist =
     JSON.parse(localStorage.getItem("data") as string) || (await fetchData());
   playlist = playlist.map((song) =>
@@ -310,21 +321,57 @@ const startMusicApp = async () => {
   renderCurrentSongInfo();
 };
 
+const toggleSleepTimer = () => {
+  sleepTimer.style.display =
+    sleepTimer.style.display === "block" ? "none" : "block";
+};
+
+const setSleepTimer = async () => {
+  const timeout = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
+  const timerInputValue: number = Number(timerInput.value);
+  timer = timerInputValue * 1000 * 60;
+  if (timer === 60000) {
+    letterS.style.display = "none";
+  }
+  settingsBtn.style.fill = timer ? "slateblue" : "white";
+
+  while (timer > 0) {
+    timer -= 1000;
+    const minutesStr = Math.floor(timer / 60000).toString();
+    const secondsStr = ((timer / 1000) % 60).toString();
+    minutes.textContent =
+      minutesStr.length === 1 ? "0" + minutesStr : minutesStr;
+    seconds.textContent =
+      secondsStr.length === 1 ? "0" + secondsStr : secondsStr;
+    await timeout(1000);
+  }
+  if (timer === 0) {
+    audioPlayer.pause();
+    renderCurrentSongInfo();
+    settingsBtn.style.fill = "white";
+    minutes.textContent = "00";
+    seconds.textContent = "00";
+  }
+};
+
 // call the funktions
 document.addEventListener("DOMContentLoaded", startMusicApp);
 document.addEventListener("click", resetFilteredSongsContainer);
-menuBtn?.addEventListener("click", handleMenuBtnKlick);
-searchBtn?.addEventListener("click", toggleSearchbar);
-searchbar?.addEventListener("input", searchSong);
-searchbar?.addEventListener("focus", resetFilteredSongsContainer);
+menuBtn.addEventListener("click", handleMenuBtnKlick);
+searchBtn.addEventListener("click", toggleSearchbar);
+searchbar.addEventListener("input", searchSong);
+searchbar.addEventListener("focus", resetFilteredSongsContainer);
 
-playBtn?.addEventListener("click", togglePlay);
-prevBtn?.addEventListener("click", playPreviousSong);
-nextBtn?.addEventListener("click", playNextSong);
-audioPlayer?.addEventListener("timeupdate", updateTime);
+playBtn.addEventListener("click", togglePlay);
+prevBtn.addEventListener("click", playPreviousSong);
+nextBtn.addEventListener("click", playNextSong);
+audioPlayer.addEventListener("timeupdate", updateTime);
 audioPlayer.addEventListener("ended", playNextSong);
-progressBar?.addEventListener("input", setCurrentTime);
+progressBar.addEventListener("input", setCurrentTime);
 
-likeBtn?.addEventListener("click", () => toggleFavorite(currentSongIndex));
-shuffleBtn?.addEventListener("click", shuffle);
+likeBtn.addEventListener("click", () => toggleFavorite(currentSongIndex));
+shuffleBtn.addEventListener("click", shuffle);
 repeatOneBtn.addEventListener("click", toggleRepeat);
+settingsBtn.addEventListener("click", toggleSleepTimer);
+timerBtn.addEventListener("click", setSleepTimer);

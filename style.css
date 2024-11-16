@@ -301,8 +301,8 @@ audio {
   display: block;
   position: absolute;
   left: 0;
-  bottom: 2rem;
-  height: 20rem;
+  top: 11.5rem;
+  max-height: calc(100vh - 14.5rem);
   overflow-x: hidden;
   overflow-y: auto;
   padding: 0.8rem;
@@ -315,7 +315,7 @@ audio {
   align-items: start;
   justify-content: space-between;
   text-align: center;
-  padding: 1rem .3rem;
+  padding: 1rem 0.3rem;
   border-radius: 4px;
   column-gap: 0.5rem;
   color: #bbbbbb;
@@ -336,9 +336,10 @@ audio {
   color: #ddd;
 }
 
-.playlistItem > .artist, .playlistItem > .length {
+.playlistItem > .artist,
+.playlistItem > .length {
   color: #999;
-  font-size: .6rem;
+  font-size: 0.6rem;
 }
 
 .playlistItem > svg {
@@ -361,4 +362,57 @@ footer {
   padding: 0.5rem 0.8rem;
   border-top: 2px solid #6a5acd;
   z-index: 10;
+}
+
+.sleepTimer {
+  display: none;
+  position: absolute;
+  top: -70vh;
+  left: 10%;
+  right: 10%;
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 1rem;
+  box-shadow: 0 0 25px rgba(200, 200, 200, 0.3);
+}
+
+.sleepTimer > div:first-of-type {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.sleepTimer input {
+  width: 2rem;
+}
+
+.sleepTimer button {
+  border: none;
+  padding: 2px 4px;
+  border-radius: 2px;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, .5);
+  background-color: slateblue;
+  color: white;
+}
+
+.sleepTimer button:hover {
+  opacity: .9;
+}
+
+.sleepTimer button:active {
+  opacity: .8;
+}
+
+.sleepTimer > div:last-of-type {
+  font-size: 2rem;
+  text-align: center;
+  margin-top: .5rem;
+}
+
+/* Media query */
+@media screen and (height < 14rem) {
+  footer,
+  .container.active .playlist {
+    display: none;
+  }
 }
