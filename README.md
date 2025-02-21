@@ -28,4 +28,11 @@ Unser Anspruch war es nicht nur, das Gelernte anzuwenden, sondern uns auch selbs
 - CSS  
 - HTML  
 
-Viel Spaß beim Entdecken und Ausprobieren!
+## Preview
+
+![Music App Preview](app-preview/preview1.png)
+![Music App Preview](app-preview/preview2.png)
+![Music App Preview](app-preview/preview3.png)
+![Music App Preview](app-preview/preview4.png)
+
+🎉 Viel Spaß beim Entdecken und Ausprobieren!
