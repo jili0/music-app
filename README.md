@@ -1,36 +1,31 @@
 # Music App
-## Projektübersicht
-- Lieder abspielen, pausieren, vor- und zurückspulen
-- Lieder filtern und suchen
-- Favoriten speichern
-- Playlist anzeigen
+## Frontend-Projekt mit TypeScript (Teamprojekt)
 
----
+## Features
 
-## Team: Dursel, Angelique, Jing 
+- Songs abspielen, pausieren und zum vorherigen/nächsten Titel springen  
+- Songs als Favoriten speichern  
+- Nach Titel oder Interpret suchen  
+- Playlist anzeigen und verwalten  
+- Shuffle-Modus für zufällige Wiedergabe  
+- Sleep-Timer für automatische Beendigung der Wiedergabe  
 
-- ### BeatBuilders
-- **Thema**: Musik-App mit interaktiver Playlist
+## Unser Team
 
-## Ziel des Projekts
+- Dursel Türkan  
+- Angelique Guisse  
+- Jing Li  
 
-- Dieses Projekt dient dem Zweck, unsere Fähigkeiten im Umgang mit TypeScript, CSS und HTML zu erweitern. Wir möchten das Gelernte praktisch anwenden und uns herausfordern, um neue Erfahrungen im Bereich der Frontend-Entwicklung zu sammeln.
+## Über das Projekt
 
+Dieses Projekt haben wir gemeinsam nach dem Frontend-Modul im DCI-Kurs entwickelt. Unser Ziel war es, unsere Kenntnisse in **JavaScript, CSS und HTML** zu vertiefen. Statt JavaScript haben wir bewusst **TypeScript** gewählt, da es eine zentrale Rolle in der modernen Webentwicklung spielt. Dadurch möchten wir uns optimal auf den Arbeitsmarkt vorbereiten und wertvolle praktische Erfahrungen mit TypeScript sammeln.  
+
+Unser Anspruch war es nicht nur, das Gelernte anzuwenden, sondern uns auch selbst herauszufordern. Obwohl TypeScript nicht Teil des Curriculums war, haben wir unser Projekt damit umgesetzt, um neue Erfahrungen in der **Frontend-Entwicklung** zu gewinnen.  
 
 ## Technologien
-- **HTML** - Für die Strukturierung der Benutzeroberfläche
-- **CSS** - Für eine schnelle und responsive Gestaltung des User Interface
-- **Typescript** - Für die strukturierte Programmierung
 
+- TypeScript  
+- CSS  
+- HTML  
 
-## Funktionen der App
-- **Abspielen und Pausieren**: Der Benutzer kann ein Lied aus der Playlist abspielen und pausieren.
-- **Vor-und Zurückspringen**: Der Benutzer kann Lieder überspringen oder zurückgehen.
-- **Vor-und Zurückspulen**: Der Benuter kann während der Wiedergabe vor- und zurückspulen.
-- **Favoriten speichern**: Lieder können als Favoriten markiert werden.
-- **Shuffle-Modus**- Zufällige Wiedergabe der Lieder.
-
-
-
-
-**Viel Spaß beim Entdecken und Ausprobieren der App! 🎉**
+Viel Spaß beim Entdecken und Ausprobieren!
