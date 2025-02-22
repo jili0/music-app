@@ -15,6 +15,11 @@
 - Dursel Türkan  
 - Angelique Guisse  
 - Jing Li  
+  
+## Projekt Zeitraum
+
+Hauptentwicklungsphase: 29.09.2024 – 13.10.2024
+Weiterentwicklung & Optimierungen: Nach Bedarf
 
 ## Über das Projekt
 
@@ -30,9 +35,17 @@ Unser Anspruch war es nicht nur, das Gelernte anzuwenden, sondern uns auch selbs
 
 ## Preview
 
-![Music App Preview](app-preview/preview1.png)
-![Music App Preview](app-preview/preview2.png)
-![Music App Preview](app-preview/preview3.png)
-![Music App Preview](app-preview/preview4.png)
+<img src="app-preview/preview1.png" alt="musicApp Preview" width="500"/>
+<br>
+
+<img src="app-preview/preview2.png" alt="musicApp Preview" width="500"/>
+<br>
+
+<img src="app-preview/preview3.png" alt="musicApp Preview" width="500"/>
+<br>
+
+<img src="app-preview/preview4.png" alt="musicApp Preview" width="500"/>
+<br>
+
 
 🎉 Viel Spaß beim Entdecken und Ausprobieren!
