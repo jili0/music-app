@@ -1,6 +1,7 @@
-# 🎵 Music App
+# Music App
 
 A responsive music player application with modern design, developed with TypeScript.
+<br><br>
 
 ## 📋 About the Project
 
@@ -11,6 +12,7 @@ We deliberately chose TypeScript, although it wasn't part of the course curricul
 - Gain valuable practical experience with static typing
 - Better prepare ourselves for the current job market
 - Improve code quality and reliability
+<br><br>
 
 ## ✨ Features
 
@@ -30,6 +32,7 @@ We deliberately chose TypeScript, although it wasn't part of the course curricul
   - Responsive user interface
   - Album cover display
   - Clear playlist view
+<br><br>
 
 ## 🛠️ Technologies
 
@@ -38,39 +41,55 @@ We deliberately chose TypeScript, although it wasn't part of the course curricul
 - **CSS3** - For responsive design and animations
 - **LocalStorage** - For storing user preferences and favorites
 - **HTML5 Audio Element** - For music playback functionality
+<br><br>
 
 ## 📷 App Preview
 
 <div align="center">
-  <img src="app-preview/preview1.png" alt="Music App Main View" width="500"/>
-  <p><em>Main View - Active Music Player</em></p>
-  
-  <img src="app-preview/preview2.png" alt="Music App Playlist" width="500"/>
-  <p><em>Playlist View with Favorites Function</em></p>
-  
-  <img src="app-preview/preview3.png" alt="Music App Search" width="500"/>
-  <p><em>Search Function for Songs and Artists</em></p>
-  
-  <img src="app-preview/preview4.png" alt="Music App Sleep Timer" width="500"/>
-  <p><em>Sleep Timer Settings</em></p>
+  <table>
+    <tr>
+      <td align="center">
+        <img src="app-preview/preview1.png" alt="Music App Main View" width="400"/>
+        <p><em>Main View - Active Music Player</em></p>
+      </td>
+      <td align="center">
+        <img src="app-preview/preview2.png" alt="Music App Playlist" width="400"/>
+        <p><em>Playlist View with Favorites Function</em></p>
+      </td>
+    </tr>
+    <tr>
+      <td align="center">
+        <img src="app-preview/preview3.png" alt="Music App Search" width="400"/>
+        <p><em>Search Function for Songs and Artists</em></p>
+      </td>
+      <td align="center">
+        <img src="app-preview/preview4.png" alt="Music App Sleep Timer" width="400"/>
+        <p><em>Sleep Timer Settings</em></p>
+      </td>
+    </tr>
+  </table>
 </div>
+<br><br>
 
 ## 👥 Our Team
 
 - **Dursel Türkan** - UI/UX & Frontend Development
 - **Angelique Guisse** - CSS Styling & Responsive Design
 - **Jing Li** - Function Logic & Code Refactoring
+<br><br>
 
 ## ⏱️ Project Timeline
 
 - **Main Development Phase:** Sept 29, 2024 – Oct 13, 2024
 - **Further Development & Optimizations:** Ongoing as needed
+<br><br>
 
 ## 🔜 Planned Extensions
 
 - Integration of a music API for extended song selection
 - Create and save custom playlists
 - Equalizer for sound settings
+<br><br>
 
 ## 🤝 Contribute
 
