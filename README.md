@@ -1,51 +1,89 @@
-# Music App
-## Frontend-Projekt mit TypeScript (Teamprojekt)
+# 🎵 Music App
 
-## Features
+A responsive music player application with modern design, developed with TypeScript.
 
-- Songs abspielen, pausieren und zum vorherigen/nächsten Titel springen  
-- Songs als Favoriten speichern  
-- Nach Titel oder Interpret suchen  
-- Playlist anzeigen und verwalten  
-- Shuffle-Modus für zufällige Wiedergabe  
-- Sleep-Timer für automatische Beendigung der Wiedergabe  
+## 📋 About the Project
 
-## Unser Team
+We developed this music player application as a team after completing the Frontend module in our DCI course. Our main goal was to deepen our knowledge of **JavaScript, CSS, and HTML** while learning **TypeScript** - a technology that is becoming increasingly important in modern web development.
 
-- Dursel Türkan  
-- Angelique Guisse  
-- Jing Li  
+We deliberately chose TypeScript, although it wasn't part of the course curriculum, to:
+- Expand our programming skills
+- Gain valuable practical experience with static typing
+- Better prepare ourselves for the current job market
+- Improve code quality and reliability
+
+## ✨ Features
+
+- **Music Playback**
+  - Play and pause songs
+  - Skip to previous/next track
+  - Progress bar with current time and total duration
   
-## Projekt Zeitraum
+- **Advanced Functions**
+  - Mark favorite songs
+  - Search for songs by title or artist
+  - Shuffle mode for random playback
+  - Repeat mode for single tracks
+  - Sleep timer for automatic playback termination
+  
+- **User-Friendly Design**
+  - Responsive user interface
+  - Album cover display
+  - Clear playlist view
 
-Hauptentwicklungsphase: 29.09.2024 – 13.10.2024
-Weiterentwicklung & Optimierungen: Nach Bedarf
+## 🛠️ Technologies
 
-## Über das Projekt
+- **TypeScript** - For type-safe, structured code
+- **HTML5** - For the basic structure of the application
+- **CSS3** - For responsive design and animations
+- **LocalStorage** - For storing user preferences and favorites
+- **HTML5 Audio Element** - For music playback functionality
 
-Dieses Projekt haben wir gemeinsam nach dem Frontend-Modul im DCI-Kurs entwickelt. Unser Ziel war es, unsere Kenntnisse in **JavaScript, CSS und HTML** zu vertiefen. Statt JavaScript haben wir bewusst **TypeScript** gewählt, da es eine zentrale Rolle in der modernen Webentwicklung spielt. Dadurch möchten wir uns optimal auf den Arbeitsmarkt vorbereiten und wertvolle praktische Erfahrungen mit TypeScript sammeln.  
+## 📷 App Preview
 
-Unser Anspruch war es nicht nur, das Gelernte anzuwenden, sondern uns auch selbst herauszufordern. Obwohl TypeScript nicht Teil des Curriculums war, haben wir unser Projekt damit umgesetzt, um neue Erfahrungen in der **Frontend-Entwicklung** zu gewinnen.  
+<div align="center">
+  <img src="app-preview/preview1.png" alt="Music App Main View" width="500"/>
+  <p><em>Main View - Active Music Player</em></p>
+  
+  <img src="app-preview/preview2.png" alt="Music App Playlist" width="500"/>
+  <p><em>Playlist View with Favorites Function</em></p>
+  
+  <img src="app-preview/preview3.png" alt="Music App Search" width="500"/>
+  <p><em>Search Function for Songs and Artists</em></p>
+  
+  <img src="app-preview/preview4.png" alt="Music App Sleep Timer" width="500"/>
+  <p><em>Sleep Timer Settings</em></p>
+</div>
 
-## Technologien
+## 👥 Our Team
 
-- TypeScript  
-- CSS  
-- HTML  
+- **Dursel Türkan** - UI/UX & Frontend Development
+- **Angelique Guisse** - CSS Styling & Responsive Design
+- **Jing Li** - Function Logic & Code Refactoring
 
-## Preview
+## ⏱️ Project Timeline
 
-<img src="app-preview/preview1.png" alt="musicApp Preview" width="500"/>
-<br>
+- **Main Development Phase:** Sept 29, 2024 – Oct 13, 2024
+- **Further Development & Optimizations:** Ongoing as needed
 
-<img src="app-preview/preview2.png" alt="musicApp Preview" width="500"/>
-<br>
+## 🔜 Planned Extensions
 
-<img src="app-preview/preview3.png" alt="musicApp Preview" width="500"/>
-<br>
+- Dark mode for comfortable use at night
+- Integration of a music API for extended song selection
+- Create and save custom playlists
+- Equalizer for sound settings
+- Mobile app with React Native
 
-<img src="app-preview/preview4.png" alt="musicApp Preview" width="500"/>
-<br>
+## 🤝 Contribute
 
+We welcome contributions! If you'd like to suggest improvements:
 
-🎉 Viel Spaß beim Entdecken und Ausprobieren!
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add: AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+---
+
+🎉 Have fun exploring and trying out our Music App!
