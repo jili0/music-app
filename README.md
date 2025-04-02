@@ -68,11 +68,9 @@ We deliberately chose TypeScript, although it wasn't part of the course curricul
 
 ## 🔜 Planned Extensions
 
-- Dark mode for comfortable use at night
 - Integration of a music API for extended song selection
 - Create and save custom playlists
 - Equalizer for sound settings
-- Mobile app with React Native
 
 ## 🤝 Contribute
 
